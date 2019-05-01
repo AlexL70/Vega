@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 
-namespace Vega.Models
+namespace Vega.Models.Dto
 {
-    public class Make
+    public class MakeDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public ICollection<Model> Models { get; set; }
+        public List<ModelDto> Models { get; set; }
     }
 }
