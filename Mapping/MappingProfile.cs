@@ -1,10 +1,8 @@
 using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
 using Vega.Models;
 using Vega.Models.Dto;
 
-namespace Vega
+namespace Vega.Mapping
 {
     public class MappingProfile : Profile
     {

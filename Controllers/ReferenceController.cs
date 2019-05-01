@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Vega.Models;
 using Vega.Models.Dto;
+using Vega.Mapping;
 
 namespace Vega.Controllers
 {
@@ -21,20 +22,20 @@ namespace Vega.Controllers
         }
 
         [HttpGet("/api/makes")]
-        public IEnumerable<MakeDto> GetMakes() {
-            var makes = _context.Makes.Include(m => m.Models).OrderBy(m => m.Name)
-                .Select(_mapper.Map<Make, MakeDto>)
-                .ToList();
+        public async Task<IEnumerable<MakeDto>> GetMakes() {
+            var makes = await _context.Makes.Include(m => m.Models).OrderBy(m => m.Name)
+                .ToListAsync();
 
-            return makes;
+            return _mapper.Map<List<Make>, List<MakeDto>>(makes);
         }
 
         [HttpGet("/api/features")]
-        public IEnumerable<FeatureDto> GetFeatures() {
-            return  _context.Features
+        public async Task<IEnumerable<FeatureDto>> GetFeatures() {
+            var features = await  _context.Features
                 .OrderBy(f => f.Name)
-                .Select(_mapper.Map<Feature, FeatureDto>)
-                .ToList();
+                .ToListAsync();
+
+            return _mapper.Map<List<Feature>, List<FeatureDto>>(features);
         }
     }
 }
