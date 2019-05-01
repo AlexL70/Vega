@@ -11,8 +11,7 @@ namespace Vega
         public MappingProfile()
         {
             CreateMap<Feature, FeatureDto>();
-            CreateMap<Model, ModelDto>()
-                .ForMember(m => m.MakeId, opt => opt.MapFrom(m => m.Make.Id));
+            CreateMap<Model, ModelDto>();
             CreateMap<Make, MakeDto>();
         }
     }
