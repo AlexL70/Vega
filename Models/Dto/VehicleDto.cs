@@ -9,9 +9,9 @@ namespace Vega.Models.Dto
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Please enter proper make.")]
-        public int MakeId { get; set; }
+        public int? MakeId { get; set; }
         [Required(ErrorMessage = "Please enter proper model.")]
-        public int ModelId { get; set; }
+        public int? ModelId { get; set; }
         public bool? IsRegistered { get; set; }
 
         [Required]

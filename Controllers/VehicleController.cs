@@ -48,7 +48,7 @@ namespace Vega.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateVehicle([FromBody] VehicleDto dto) {
             if(!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ModelState);
 
             var vehicle = _mapper.Map<VehicleDto, Vehicle>(dto);
             vehicle.LastUpdated = DateTime.UtcNow;
@@ -64,10 +64,11 @@ namespace Vega.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateVehicle(int id, [FromBody] VehicleDto dto) {
+            if(dto != null && id != dto.Id) {
+                ModelState.AddModelError("Id:", $"Id parameter is {id}, but id of object passed in body is {dto.Id}");
+            }
             if(!ModelState.IsValid)
-                return BadRequest();
-            if(id != dto.Id)
-                return BadRequest();
+                return BadRequest(ModelState);
 
             var vehicle = await _context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
             if(vehicle == null)
