@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Vega.Models
+namespace Vega.Models.Dto
 {
-    public class Vehicle
+    public class VehicleDto
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter proper make.")]
+        public int MakeId { get; set; }
+        [Required(ErrorMessage = "Please enter proper model.")]
         public int ModelId { get; set; }
-        public Model Model { get; set; }
         public bool? IsRegistered { get; set; }
-        public ICollection<VehicleFeature> Features { get; set; }
+        public ICollection<int> FeatureIds { get; set; }
         [Required][StringLength(255)]
         public string ContactName { get; set; }
         [Required][StringLength(255)]
         public string ContactPhone { get; set; }
         [StringLength(255)]
         public string ContactEmail { get; set; }
-        public DateTime LastUpdated { get; set; }
 
-        public Vehicle()
+        public VehicleDto()
         {
-            Features = new Collection<VehicleFeature>();
+            FeatureIds = new Collection<int>();
         }
     }
 }
