@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,7 +10,7 @@ using Vega.Models.Dto;
 
 namespace Vega.Controllers
 {
-    [ApiController]
+    [ApiController] [Route("/api/vehicles")]
     public class VehicleController : Controller
     {
         private readonly VegaDbContext _context;
@@ -21,7 +22,7 @@ namespace Vega.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("/api/vehicles")]
+        [HttpGet]
         public async Task<IActionResult> GetVehicles() {
             var vehicles = await _context.Vehicles
                 .Include(v => v.Features)
@@ -30,7 +31,7 @@ namespace Vega.Controllers
             return Ok(_mapper.Map<List<Vehicle>, List<VehicleDto>>(vehicles));
         }
 
-        [HttpGet("/api/vehicles/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicles(int id) {
             var vehicle = await _context.Vehicles
                 .Include(v => v.Features)
@@ -42,7 +43,7 @@ namespace Vega.Controllers
             return Ok(_mapper.Map<Vehicle, VehicleDto>(vehicle));
         }
 
-        [HttpPost("/api/vehicles")]
+        [HttpPost]
         [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateVehicle([FromBody] VehicleDto dto) {
@@ -50,13 +51,15 @@ namespace Vega.Controllers
                 return BadRequest();
 
             var vehicle = _mapper.Map<VehicleDto, Vehicle>(dto);
+            vehicle.LastUpdated = DateTime.UtcNow;
             await _context.AddAsync(vehicle);
-            dto.Id = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            dto.Id = vehicle.Id;
             
             return CreatedAtAction(nameof(GetVehicles), new { id = dto.Id }, dto);
         }
 
-        [HttpPut("/api/vehicles/{id}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,6 +74,7 @@ namespace Vega.Controllers
                 return NotFound();
 
             _mapper.Map<VehicleDto, Vehicle>(dto, vehicle);
+            vehicle.LastUpdated = DateTime.UtcNow;
             _context.Entry(vehicle).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -78,7 +82,7 @@ namespace Vega.Controllers
             return Ok(dto);
         }
 
-        [HttpDelete("/api/vehicles/{id}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteVehicle(int id) {
