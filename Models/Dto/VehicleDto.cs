@@ -13,13 +13,10 @@ namespace Vega.Models.Dto
         [Required(ErrorMessage = "Please enter proper model.")]
         public int ModelId { get; set; }
         public bool? IsRegistered { get; set; }
+
+        [Required]
+        public ContactDto Contact { get; set; }
         public ICollection<int> FeatureIds { get; set; }
-        [Required][StringLength(255)]
-        public string ContactName { get; set; }
-        [Required][StringLength(255)]
-        public string ContactPhone { get; set; }
-        [StringLength(255)]
-        public string ContactEmail { get; set; }
 
         public VehicleDto()
         {
