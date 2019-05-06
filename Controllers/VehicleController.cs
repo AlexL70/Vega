@@ -38,7 +38,7 @@ namespace Vega.Controllers
                 .Include(v => v.Model).SingleOrDefaultAsync(v => v.Id == id);
 
             if(vehicle == null)
-                return NotFound();
+                return NotFound($"Vehicle with Id = {id} not found.");
 
             return Ok(_mapper.Map<Vehicle, VehicleDto>(vehicle));
         }
@@ -72,7 +72,7 @@ namespace Vega.Controllers
 
             var vehicle = await _context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
             if(vehicle == null)
-                return NotFound();
+                return NotFound($"Vehicle with Id = {id} not found.");
 
             _mapper.Map<VehicleDto, Vehicle>(dto, vehicle);
             vehicle.LastUpdated = DateTime.UtcNow;
@@ -95,7 +95,7 @@ namespace Vega.Controllers
             _context.Vehicles.Remove(vehicle);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(id);
         }
     }
 }
