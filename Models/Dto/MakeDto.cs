@@ -2,12 +2,10 @@ using System.Collections.Generic;
 
 namespace Vega.Models.Dto
 {
-    public class MakeDto
+    public class MakeDto : KeyValuePairDto
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public IList<ModelDto> Models { get; set; }
+        public IList<KeyValuePairDto> Models { get; set; }
 
-        public MakeDto() => Models = new List<ModelDto>();
+        public MakeDto() => Models = new List<KeyValuePairDto>();
     }
 }

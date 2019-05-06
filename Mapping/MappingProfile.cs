@@ -9,9 +9,10 @@ namespace Vega.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Feature, FeatureDto>();
-            CreateMap<Model, ModelDto>();
+            CreateMap<Feature, KeyValuePairDto>();
+            CreateMap<Model, KeyValuePairDto>();
             CreateMap<Make, MakeDto>();
+            CreateMap<Make, KeyValuePairDto>();
 
             CreateMap<Vehicle, SaveVehicleDto>()
                 .ForMember(dest => dest.FeatureIds, opt => opt.MapFrom(src =>
@@ -31,14 +32,11 @@ namespace Vega.Mapping
                         Phone = src.ContactPhone
                     }))
                 .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features
-                    .Select(f => new FeatureDto {
+                    .Select(f => new KeyValuePairDto {
                         Id = f.FeatureId,
                         Name = f.Feature.Name
                     })))
-                .ForMember(dest => dest.Make, opt => opt.MapFrom(src => new MakeDto {
-                        Id = src.Model.MakeId,
-                        Name = src.Model.Make.Name
-                    }));
+                .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make));
 
             CreateMap<SaveVehicleDto, Vehicle>()
                 .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.Contact.Name))
