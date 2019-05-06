@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Vega.Models;
 using Vega.Common;
+using Vega.Persistence;
 using System.Reflection;
 
 namespace Vega

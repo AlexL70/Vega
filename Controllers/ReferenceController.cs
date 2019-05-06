@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Vega.Models;
 using Vega.Models.Dto;
 using Vega.Mapping;
+using Vega.Persistence;
 
 namespace Vega.Controllers
 {
