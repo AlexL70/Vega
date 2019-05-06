@@ -27,12 +27,9 @@ namespace Vega.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetVehicles() {
-            var vehicles = await _context.Vehicles
-                .Include(v => v.Features).ThenInclude(f => f.Feature)
-                .Include(v => v.Model).ThenInclude(m => m.Make)
-                .ToListAsync();
+            var vehicles = await _repository.GetVehicles();
 
-            return Ok(_mapper.Map<List<Vehicle>, List<VehicleDto>>(vehicles));
+            return Ok(_mapper.Map<ICollection<Vehicle>, List<VehicleDto>>(vehicles));
         }
 
         [HttpGet("{id}")]
@@ -54,7 +51,7 @@ namespace Vega.Controllers
 
             var vehicle = _mapper.Map<SaveVehicleDto, Vehicle>(dto);
             vehicle.LastUpdated = DateTime.UtcNow;
-            await _context.AddAsync(vehicle);
+            await _repository.Add(vehicle);
             await _context.SaveChangesAsync();
 
             var retObj = await _repository.GetVehicle(vehicle.Id);
@@ -93,12 +90,12 @@ namespace Vega.Controllers
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteVehicle(int id) {
-            var vehicle = await _context.Vehicles.SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _repository.GetVehicle(id, includeRelated: false);
             
             if(vehicle == null)
                 return NotFound($"Vehicle with Id = {id} not found.");
             
-            _context.Vehicles.Remove(vehicle);
+            _repository.Remove(vehicle);
             await _context.SaveChangesAsync();
 
             return Ok(id);
