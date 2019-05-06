@@ -16,11 +16,13 @@ namespace Vega.Controllers
     {
         private readonly VegaDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IVehicleRepository _repository;
 
-        public VehicleController(VegaDbContext context, IMapper mapper)
+        public VehicleController(VegaDbContext context, IVehicleRepository repository, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            _repository = repository;
         }
 
         [HttpGet]
@@ -35,10 +37,7 @@ namespace Vega.Controllers
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id) {
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Features).ThenInclude(f => f.Feature)
-                .Include(v => v.Model).ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _repository.GetVehicle(id);
 
             if(vehicle == null)
                 return NotFound($"Vehicle with Id = {id} not found.");
@@ -58,10 +57,7 @@ namespace Vega.Controllers
             await _context.AddAsync(vehicle);
             await _context.SaveChangesAsync();
 
-            var retObj = await _context.Vehicles
-                .Include(v => v.Features).ThenInclude(f => f.Feature)
-                .Include(v => v.Model).ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(v => v.Id == vehicle.Id);
+            var retObj = await _repository.GetVehicle(vehicle.Id);
 
             return CreatedAtAction(nameof(GetVehicles), new { id = vehicle.Id },
                 _mapper.Map<Vehicle, VehicleDto>(retObj));
@@ -78,7 +74,7 @@ namespace Vega.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var vehicle = await _context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _repository.GetVehicle(id);
             if(vehicle == null)
                 return NotFound($"Vehicle with Id = {id} not found.");
 
@@ -88,10 +84,7 @@ namespace Vega.Controllers
 
             await _context.SaveChangesAsync();
 
-            vehicle = await _context.Vehicles
-                .Include(v => v.Features).ThenInclude(f => f.Feature)
-                .Include(v => v.Model).ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(v => v.Id == id);
+            vehicle = await _repository.GetVehicle(id);
 
             return Ok(_mapper.Map<Vehicle, VehicleDto>(vehicle));
         }
