@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Vega.Models;
 using Vega.Models.Dto;
-using Vega.Persistence;
+using Vega.Core;
 
 namespace Vega.Controllers
 {

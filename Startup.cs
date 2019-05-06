@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Vega.Models;
 using Vega.Common;
 using Vega.Persistence;
+using Vega.Core;
 using System.Reflection;
 
 namespace Vega
