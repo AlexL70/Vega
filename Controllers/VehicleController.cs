@@ -33,7 +33,7 @@ namespace Vega.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetVehicles(int id) {
+        public async Task<IActionResult> GetVehicle(int id) {
             var vehicle = await _context.Vehicles
                 .Include(v => v.Features).ThenInclude(f => f.Feature)
                 .Include(v => v.Model).ThenInclude(m => m.Make)
@@ -46,7 +46,7 @@ namespace Vega.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(SaveVehicleDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleDto dto) {
             if(!ModelState.IsValid)
@@ -56,13 +56,18 @@ namespace Vega.Controllers
             vehicle.LastUpdated = DateTime.UtcNow;
             await _context.AddAsync(vehicle);
             await _context.SaveChangesAsync();
-            dto.Id = vehicle.Id;
-            
-            return CreatedAtAction(nameof(GetVehicles), new { id = dto.Id }, dto);
+
+            var retObj = await _context.Vehicles
+                .Include(v => v.Features).ThenInclude(f => f.Feature)
+                .Include(v => v.Model).ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(v => v.Id == vehicle.Id);
+
+            return CreatedAtAction(nameof(GetVehicles), new { id = vehicle.Id },
+                _mapper.Map<Vehicle, VehicleDto>(retObj));
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(SaveVehicleDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleDto dto) {
@@ -82,7 +87,12 @@ namespace Vega.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(dto);
+            vehicle = await _context.Vehicles
+                .Include(v => v.Features).ThenInclude(f => f.Feature)
+                .Include(v => v.Model).ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(v => v.Id == id);
+
+            return Ok(_mapper.Map<Vehicle, VehicleDto>(vehicle));
         }
 
         [HttpDelete("{id}")]
