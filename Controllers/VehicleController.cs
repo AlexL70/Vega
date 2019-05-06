@@ -14,15 +14,15 @@ namespace Vega.Controllers
     [ApiController] [Route("/api/vehicles")]
     public class VehicleController : Controller
     {
-        private readonly VegaDbContext _context;
         private readonly IMapper _mapper;
         private readonly IVehicleRepository _repository;
+        private readonly IUnitOfWork _uow;
 
-        public VehicleController(VegaDbContext context, IVehicleRepository repository, IMapper mapper)
+        public VehicleController(IVehicleRepository repository, IUnitOfWork uow, IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
             _repository = repository;
+            _uow = uow;
         }
 
         [HttpGet]
@@ -52,7 +52,7 @@ namespace Vega.Controllers
             var vehicle = _mapper.Map<SaveVehicleDto, Vehicle>(dto);
             vehicle.LastUpdated = DateTime.UtcNow;
             await _repository.Add(vehicle);
-            await _context.SaveChangesAsync();
+            await _uow.Complete();
 
             var retObj = await _repository.GetVehicle(vehicle.Id);
 
@@ -77,9 +77,8 @@ namespace Vega.Controllers
 
             _mapper.Map<SaveVehicleDto, Vehicle>(dto, vehicle);
             vehicle.LastUpdated = DateTime.UtcNow;
-            _context.Entry(vehicle).State = EntityState.Modified;
 
-            await _context.SaveChangesAsync();
+            await _uow.Complete();
 
             vehicle = await _repository.GetVehicle(id);
 
@@ -96,7 +95,7 @@ namespace Vega.Controllers
                 return NotFound($"Vehicle with Id = {id} not found.");
             
             _repository.Remove(vehicle);
-            await _context.SaveChangesAsync();
+            await _uow.Complete();
 
             return Ok(id);
         }
