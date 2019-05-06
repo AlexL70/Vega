@@ -8,19 +8,16 @@ namespace Vega.Models.Dto
     public class VehicleDto
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Please enter proper make.")]
-        public int? MakeId { get; set; }
-        [Required(ErrorMessage = "Please enter proper model.")]
-        public int? ModelId { get; set; }
+        public ModelDto Model { get; set; }
+        public MakeDto Make { get; set; }
         public bool? IsRegistered { get; set; }
-
-        [Required]
+        public ICollection<FeatureDto> Features { get; set; }
         public ContactDto Contact { get; set; }
-        public ICollection<int> FeatureIds { get; set; }
+        public DateTime LastUpdated { get; set; }
 
         public VehicleDto()
         {
-            FeatureIds = new Collection<int>();
+            Features = new Collection<FeatureDto>();
         }
     }
 }

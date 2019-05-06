@@ -13,7 +13,7 @@ namespace Vega.Mapping
             CreateMap<Model, ModelDto>();
             CreateMap<Make, MakeDto>();
 
-            CreateMap<Vehicle, VehicleDto>()
+            CreateMap<Vehicle, SaveVehicleDto>()
                 .ForMember(dest => dest.FeatureIds, opt => opt.MapFrom(src =>
                     src.Features.Select(f => f.FeatureId).ToArray()))
                 .ForMember(dest => dest.MakeId, opt => opt.MapFrom(src => src.Model.MakeId))
@@ -23,7 +23,24 @@ namespace Vega.Mapping
                         Email = src.ContactEmail,
                         Phone = src.ContactPhone
                     }));
-            CreateMap<VehicleDto, Vehicle>()
+            CreateMap<Vehicle, VehicleDto>()
+                .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => 
+                    new ContactDto {
+                        Name = src.ContactName,
+                        Email = src.ContactEmail,
+                        Phone = src.ContactPhone
+                    }))
+                .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features
+                    .Select(f => new FeatureDto {
+                        Id = f.FeatureId,
+                        Name = f.Feature.Name
+                    })))
+                .ForMember(dest => dest.Make, opt => opt.MapFrom(src => new MakeDto {
+                        Id = src.Model.MakeId,
+                        Name = src.Model.Make.Name
+                    }));
+
+            CreateMap<SaveVehicleDto, Vehicle>()
                 .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.Contact.Name))
                 .ForMember(dest => dest.ContactPhone, opt => opt.MapFrom(src => src.Contact.Phone))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.Contact.Email))

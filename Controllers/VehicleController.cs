@@ -25,8 +25,9 @@ namespace Vega.Controllers
         [HttpGet]
         public async Task<IActionResult> GetVehicles() {
             var vehicles = await _context.Vehicles
-                .Include(v => v.Features)
-                .Include(v => v.Model).ToListAsync();
+                .Include(v => v.Features).ThenInclude(f => f.Feature)
+                .Include(v => v.Model).ThenInclude(m => m.Make)
+                .ToListAsync();
 
             return Ok(_mapper.Map<List<Vehicle>, List<VehicleDto>>(vehicles));
         }
@@ -34,8 +35,9 @@ namespace Vega.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicles(int id) {
             var vehicle = await _context.Vehicles
-                .Include(v => v.Features)
-                .Include(v => v.Model).SingleOrDefaultAsync(v => v.Id == id);
+                .Include(v => v.Features).ThenInclude(f => f.Feature)
+                .Include(v => v.Model).ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(v => v.Id == id);
 
             if(vehicle == null)
                 return NotFound($"Vehicle with Id = {id} not found.");
@@ -44,13 +46,13 @@ namespace Vega.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(SaveVehicleDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateVehicle([FromBody] VehicleDto dto) {
+        public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleDto dto) {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var vehicle = _mapper.Map<VehicleDto, Vehicle>(dto);
+            var vehicle = _mapper.Map<SaveVehicleDto, Vehicle>(dto);
             vehicle.LastUpdated = DateTime.UtcNow;
             await _context.AddAsync(vehicle);
             await _context.SaveChangesAsync();
@@ -60,10 +62,10 @@ namespace Vega.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SaveVehicleDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] VehicleDto dto) {
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleDto dto) {
             if(dto != null && id != dto.Id) {
                 ModelState.AddModelError("Id:", $"Id parameter is {id}, but id of object passed in body is {dto.Id}");
             }
@@ -74,7 +76,7 @@ namespace Vega.Controllers
             if(vehicle == null)
                 return NotFound($"Vehicle with Id = {id} not found.");
 
-            _mapper.Map<VehicleDto, Vehicle>(dto, vehicle);
+            _mapper.Map<SaveVehicleDto, Vehicle>(dto, vehicle);
             vehicle.LastUpdated = DateTime.UtcNow;
             _context.Entry(vehicle).State = EntityState.Modified;
 
