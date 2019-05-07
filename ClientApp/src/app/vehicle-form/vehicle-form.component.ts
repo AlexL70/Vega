@@ -19,16 +19,26 @@ export class VehicleFormComponent implements OnInit {
 
   constructor(private vehicleService: VehicleService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.vehicleService.getMakes().subscribe(
       makes => this.makes = makes);
     this.vehicleService.getFeatures().subscribe(
       features => this.features = features);
   }
 
-  onMakeChange() {
+  onMakeChange(): void {
     var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     this.models = selectedMake ? selectedMake.models.slice() : [];
     delete this.vehicle.modelId;
+  }
+
+  onFeatureToggle(featureId: number, event: Event): void {
+    if((<HTMLInputElement>event.target).checked) {
+      this.vehicle.featureIds.push(featureId);
+    } else {
+      var index = this.vehicle.featureIds.indexOf(featureId);
+      if(index > -1)
+        this.vehicle.featureIds.splice(index, 1);
+    }
   }
 }
