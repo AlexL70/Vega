@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Make } from '../Models/Make';
 import { Feature } from '../Models/Feature';
+import { SaveVehicle } from '../Models/SaveVehicle';
+import { Vehicle } from '../Models/Vehicle';
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +19,9 @@ export class VehicleService {
 
   getFeatures(): Observable<Feature[]> {
     return <Observable<Feature[]>> this.http.get('/api/features');
+  }
+
+  create(vehicle: SaveVehicle): Observable<Vehicle> {
+    return <Observable<Vehicle>>this.http.post('/api/vehicles', vehicle);
   }
 }

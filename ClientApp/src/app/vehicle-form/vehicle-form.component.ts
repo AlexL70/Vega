@@ -41,4 +41,9 @@ export class VehicleFormComponent implements OnInit {
         this.vehicle.featureIds.splice(index, 1);
     }
   }
+
+  submit(): void {
+    this.vehicleService.create(this.vehicle)
+      .subscribe(x => console.log(x));
+  }
 }
