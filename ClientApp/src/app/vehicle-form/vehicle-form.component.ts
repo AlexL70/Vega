@@ -1,5 +1,6 @@
 import { VehicleService } from '../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
+import { ToastyService } from 'ng2-toasty';
 
 import { Make } from '../Models/Make';
 import { Model } from '../Models/Model';
@@ -17,7 +18,8 @@ export class VehicleFormComponent implements OnInit {
   features: Feature[] = [];
   vehicle: SaveVehicle = new SaveVehicle();
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService,
+    private toastyService: ToastyService) { }
 
   ngOnInit(): void {
     this.vehicleService.getMakes().subscribe(
@@ -44,6 +46,26 @@ export class VehicleFormComponent implements OnInit {
 
   submit(): void {
     this.vehicleService.create(this.vehicle)
-      .subscribe(x => console.log(x));
+      .subscribe(
+        x => {
+          //console.log(x),
+          this.toastyService.success({
+            title: "Saved",
+            msg: "Vehicle is successfully saved.",
+            showClose: true,
+            timeout: 5000,
+            theme: 'bootstrap'
+          });
+        },
+        err => {
+          console.log("Unexpected server error:", err);
+          this.toastyService.error({
+            title: 'Error',
+            msg: 'Unexpected server error occured while saving vehicle',
+            theme: 'bootstrap',
+            showClose: true,
+            timeout: 5000
+          });
+        });
   }
 }
