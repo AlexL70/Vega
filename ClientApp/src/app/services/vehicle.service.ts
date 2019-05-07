@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Make } from '../Models/Make';
+import { Feature } from '../Models/Feature';
 
 @Injectable({
   providedIn: 'root'
@@ -16,21 +18,4 @@ export class VehicleService {
   getFeatures(): Observable<Feature[]> {
     return <Observable<Feature[]>> this.http.get('/api/features');
   }
-}
-
-export class Make {
-  public id: number;
-  public name: string;
-  public models: Model[];
-}
-
-export class Model {
-  public id: number;
-  public name: string;
-  public makeId: number;
-}
-
-export class Feature {
-  public id: number;
-  public name: string;
 }

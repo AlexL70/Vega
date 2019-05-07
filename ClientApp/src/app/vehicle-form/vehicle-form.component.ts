@@ -1,5 +1,10 @@
-import { VehicleService, Make, Model, Feature  } from '../services/vehicle.service';
+import { VehicleService } from '../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
+
+import { Make } from '../Models/Make';
+import { Model } from '../Models/Model';
+import { Feature } from '../Models/Feature';
+import { SaveVehicle } from '../Models/SaveVehicle';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -10,7 +15,7 @@ export class VehicleFormComponent implements OnInit {
   makes: Make[];
   models: Model[] = [];
   features: Feature[] = [];
-  vehicle: any = {};
+  vehicle: SaveVehicle = new SaveVehicle();
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -22,8 +27,8 @@ export class VehicleFormComponent implements OnInit {
   }
 
   onMakeChange() {
-    var selectedMake = this.makes.find(m => m.id == this.vehicle.make);
+    var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     this.models = selectedMake ? selectedMake.models.slice() : [];
+    delete this.vehicle.modelId;
   }
-
 }
