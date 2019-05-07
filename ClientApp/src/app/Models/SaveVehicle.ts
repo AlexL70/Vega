@@ -5,6 +5,6 @@ export class SaveVehicle {
   public makeId: number;
   public modelId: number;
   public osRegistered: boolean;
-  public contact: Contact
+  public contact: Contact = new Contact();
   public featureIds: number[] = [];
 }
