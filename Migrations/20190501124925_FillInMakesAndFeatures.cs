@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Vega.Models;
+using Vega.Core.Models;
 
 namespace Vega.Migrations
 {

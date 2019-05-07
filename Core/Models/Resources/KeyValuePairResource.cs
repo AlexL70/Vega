@@ -1,6 +1,6 @@
-namespace Vega.Models.Dto
+namespace Vega.Core.Models.Resources
 {
-    public class KeyValuePairDto
+    public class KeyValuePairResource
     {
         public int Id { get; set; }
         public string Name { get; set; }

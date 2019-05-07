@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Vega.Models;
+using Vega.Core.Models;
 using Vega.Common;
 using Vega.Persistence;
 using Vega.Core;

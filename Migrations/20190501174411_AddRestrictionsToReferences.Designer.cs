@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Vega.Models;
+using Vega.Core.Models;
 using Vega.Persistence;
 
 namespace Vega.Migrations
@@ -21,7 +21,7 @@ namespace Vega.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Vega.Models.Feature", b =>
+            modelBuilder.Entity("Vega.Core.Models.Feature", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace Vega.Migrations
                     b.ToTable("Features");
                 });
 
-            modelBuilder.Entity("Vega.Models.Make", b =>
+            modelBuilder.Entity("Vega.Core.Models.Make", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace Vega.Migrations
                     b.ToTable("Makes");
                 });
 
-            modelBuilder.Entity("Vega.Models.Model", b =>
+            modelBuilder.Entity("Vega.Core.Models.Model", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,9 +70,9 @@ namespace Vega.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("Vega.Models.Model", b =>
+            modelBuilder.Entity("Vega.Core.Models.Model", b =>
                 {
-                    b.HasOne("Vega.Models.Make", "Make")
+                    b.HasOne("Vega.Core.Models.Make", "Make")
                         .WithMany("Models")
                         .HasForeignKey("MakeId")
                         .OnDelete(DeleteBehavior.Cascade);

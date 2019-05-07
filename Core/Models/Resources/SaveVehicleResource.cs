@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Vega.Models.Dto
+namespace Vega.Core.Models.Resources
 {
-    public class SaveVehicleDto
+    public class SaveVehicleResource
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Please enter proper make.")]
@@ -15,10 +14,10 @@ namespace Vega.Models.Dto
         public bool? IsRegistered { get; set; }
 
         [Required]
-        public ContactDto Contact { get; set; }
+        public ContactResource Contact { get; set; }
         public ICollection<int> FeatureIds { get; set; }
 
-        public SaveVehicleDto()
+        public SaveVehicleResource()
         {
             FeatureIds = new Collection<int>();
         }

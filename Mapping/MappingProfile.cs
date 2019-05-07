@@ -1,7 +1,7 @@
 using System.Linq;
 using AutoMapper;
-using Vega.Models;
-using Vega.Models.Dto;
+using Vega.Core.Models;
+using Vega.Core.Models.Resources;
 
 namespace Vega.Mapping
 {
@@ -9,36 +9,36 @@ namespace Vega.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Feature, KeyValuePairDto>();
-            CreateMap<Model, KeyValuePairDto>();
-            CreateMap<Make, MakeDto>();
-            CreateMap<Make, KeyValuePairDto>();
+            CreateMap<Feature, KeyValuePairResource>();
+            CreateMap<Model, KeyValuePairResource>();
+            CreateMap<Make, MakeResource>();
+            CreateMap<Make, KeyValuePairResource>();
 
-            CreateMap<Vehicle, SaveVehicleDto>()
+            CreateMap<Vehicle, SaveVehicleResource>()
                 .ForMember(dest => dest.FeatureIds, opt => opt.MapFrom(src =>
                     src.Features.Select(f => f.FeatureId).ToArray()))
                 .ForMember(dest => dest.MakeId, opt => opt.MapFrom(src => src.Model.MakeId))
                 .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => 
-                    new ContactDto {
+                    new ContactResource {
                         Name = src.ContactName,
                         Email = src.ContactEmail,
                         Phone = src.ContactPhone
                     }));
-            CreateMap<Vehicle, VehicleDto>()
+            CreateMap<Vehicle, VehicleResource>()
                 .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => 
-                    new ContactDto {
+                    new ContactResource {
                         Name = src.ContactName,
                         Email = src.ContactEmail,
                         Phone = src.ContactPhone
                     }))
                 .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features
-                    .Select(f => new KeyValuePairDto {
+                    .Select(f => new KeyValuePairResource {
                         Id = f.FeatureId,
                         Name = f.Feature.Name
                     })))
                 .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make));
 
-            CreateMap<SaveVehicleDto, Vehicle>()
+            CreateMap<SaveVehicleResource, Vehicle>()
                 .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.Contact.Name))
                 .ForMember(dest => dest.ContactPhone, opt => opt.MapFrom(src => src.Contact.Phone))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.Contact.Email))

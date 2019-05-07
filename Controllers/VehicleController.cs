@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Vega.Models;
-using Vega.Models.Dto;
 using Vega.Core;
+using Vega.Core.Models;
+using Vega.Core.Models.Resources;
 
 namespace Vega.Controllers
 {
@@ -28,7 +28,7 @@ namespace Vega.Controllers
         public async Task<IActionResult> GetVehicles() {
             var vehicles = await _repository.GetVehicles();
 
-            return Ok(_mapper.Map<ICollection<Vehicle>, List<VehicleDto>>(vehicles));
+            return Ok(_mapper.Map<ICollection<Vehicle>, List<VehicleResource>>(vehicles));
         }
 
         [HttpGet("{id}")]
@@ -38,17 +38,17 @@ namespace Vega.Controllers
             if(vehicle == null)
                 return NotFound($"Vehicle with Id = {id} not found.");
 
-            return Ok(_mapper.Map<Vehicle, VehicleDto>(vehicle));
+            return Ok(_mapper.Map<Vehicle, VehicleResource>(vehicle));
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleDto dto) {
+        public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource dto) {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var vehicle = _mapper.Map<SaveVehicleDto, Vehicle>(dto);
+            var vehicle = _mapper.Map<SaveVehicleResource, Vehicle>(dto);
             vehicle.LastUpdated = DateTime.UtcNow;
             await _repository.Add(vehicle);
             await _uow.Complete();
@@ -56,14 +56,14 @@ namespace Vega.Controllers
             var retObj = await _repository.GetVehicle(vehicle.Id);
 
             return CreatedAtAction(nameof(GetVehicles), new { id = vehicle.Id },
-                _mapper.Map<Vehicle, VehicleDto>(retObj));
+                _mapper.Map<Vehicle, VehicleResource>(retObj));
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(VehicleDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleDto dto) {
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] SaveVehicleResource dto) {
             if(dto != null && id != dto.Id) {
                 ModelState.AddModelError("Id:", $"Id parameter is {id}, but id of object passed in body is {dto.Id}");
             }
@@ -74,14 +74,14 @@ namespace Vega.Controllers
             if(vehicle == null)
                 return NotFound($"Vehicle with Id = {id} not found.");
 
-            _mapper.Map<SaveVehicleDto, Vehicle>(dto, vehicle);
+            _mapper.Map<SaveVehicleResource, Vehicle>(dto, vehicle);
             vehicle.LastUpdated = DateTime.UtcNow;
 
             await _uow.Complete();
 
             vehicle = await _repository.GetVehicle(id);
 
-            return Ok(_mapper.Map<Vehicle, VehicleDto>(vehicle));
+            return Ok(_mapper.Map<Vehicle, VehicleResource>(vehicle));
         }
 
         [HttpDelete("{id}")]
