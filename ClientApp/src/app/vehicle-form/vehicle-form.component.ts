@@ -2,10 +2,10 @@ import { VehicleService } from '../services/vehicle.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastyService } from 'ng2-toasty';
 
-import { Make } from '../Models/Make';
-import { Model } from '../Models/Model';
-import { Feature } from '../Models/Feature';
-import { SaveVehicle } from '../Models/SaveVehicle';
+import { Make } from '../models/Make';
+import { Model } from '../models/Model';
+import { Feature } from '../models/Feature';
+import { SaveVehicle } from '../models/SaveVehicle';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -55,17 +55,8 @@ export class VehicleFormComponent implements OnInit {
             showClose: true,
             timeout: 5000,
             theme: 'bootstrap'
-          });
-        },
-        err => {
-          console.log("Unexpected server error:", err);
-          this.toastyService.error({
-            title: 'Error',
-            msg: 'Unexpected server error occured while saving vehicle',
-            theme: 'bootstrap',
-            showClose: true,
-            timeout: 5000
-          });
-        });
+          }
+        );
+      });
   }
 }
