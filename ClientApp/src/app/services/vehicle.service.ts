@@ -22,7 +22,11 @@ export class VehicleService {
   }
 
   create(vehicle: SaveVehicle): Observable<Vehicle> {
-    return <Observable<Vehicle>>this.http.post('/api/vehicles', vehicle);
+    return <Observable<Vehicle>> this.http.post('/api/vehicles', vehicle);
+  }
+
+  update(vehicle: SaveVehicle): Observable<Vehicle> {
+    return <Observable<Vehicle>> this.http.put('/api/vehicles/' + vehicle.id, vehicle);
   }
 
   getVehicle(id: number) {
