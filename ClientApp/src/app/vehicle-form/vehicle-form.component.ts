@@ -7,6 +7,8 @@ import { Model } from '../models/Model';
 import { Feature } from '../models/Feature';
 import { SaveVehicle } from '../models/SaveVehicle';
 import { VehicleService } from '../services/vehicle.service';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/forkJoin';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -30,18 +32,24 @@ export class VehicleFormComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.vehicleService.getVehicle(this.vehicle.id).subscribe(
-      vehicle => this.vehicle = vehicle,
-      err => {
-        console.log(err);
+    var sources: Observable<any>[] = [
+      this.vehicleService.getMakes(),
+      this.vehicleService.getFeatures()
+    ];
+
+    if(this.vehicle.id)
+      sources.push(this.vehicleService.getVehicle(this.vehicle.id));
+
+    Observable.forkJoin(sources).subscribe(data => {
+        this.makes = data[0];
+        this.features = data[1];
+        if(this.vehicle.id)
+          this.vehicle = data[2];
+      }, err => {
+        // console.log(err);
         if(err.status == 404)
           this.router.navigate(['/']);
-      }
-    );
-    this.vehicleService.getMakes().subscribe(
-      makes => this.makes = makes);
-    this.vehicleService.getFeatures().subscribe(
-      features => this.features = features);
+      });
   }
 
   onMakeChange(): void {
