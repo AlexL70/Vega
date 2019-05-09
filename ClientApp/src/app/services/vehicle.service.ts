@@ -29,6 +29,10 @@ export class VehicleService {
     return <Observable<Vehicle>> this.http.put('/api/vehicles/' + vehicle.id, vehicle);
   }
 
+  delete(id: number): Observable<Vehicle> {
+    return <Observable<Vehicle>> this.http.delete('/api/vehicles/' + id);
+  }
+
   getVehicle(id: number) {
     return <Observable<SaveVehicle>> this.http.get('/api/vehicles/' + id);
   }

@@ -122,4 +122,19 @@ export class VehicleFormComponent implements OnInit {
         });
     }
   }
+
+  delete() {
+    if(confirm("Are you sure?")) {
+      this.vehicleService.delete(this.vehicle.id)
+        .subscribe(x => {
+          this.toastyService.success({
+            title: "Saved",
+            msg: "Vehicle is successfully deleted.",
+            showClose: true,
+            timeout: 5000,
+            theme: 'bootstrap'
+          });
+      });
+    }
+  }
 }
