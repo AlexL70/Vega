@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { ToastyModule } from 'ng2-toasty';
+import * as Sentry from '@sentry/browser';
 
 import { VehicleService } from './services/vehicle.service';
 import { AppComponent } from './app.component';
@@ -15,6 +16,9 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 
+Sentry.init({
+  dsn: "https://f744306dfa3249e8a86ff4b4b14ef880@sentry.io/1455076"
+});
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +36,7 @@ import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'vehicles/new', component: VehicleFormComponent },
+      { path: 'vehicles/:id', component: VehicleFormComponent },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ])
