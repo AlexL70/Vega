@@ -1,4 +1,4 @@
-export class KeyValuePair {
-  public id: number;
-  public name: string;
+export interface KeyValuePair {
+  id: number;
+  name: string;
 }

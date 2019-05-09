@@ -1,10 +1,10 @@
 import { Contact } from "./Contact"
 
-export class SaveVehicle {
-  public id: number;
-  public makeId: number;
-  public modelId: number;
-  public osRegistered: boolean;
-  public contact: Contact = new Contact();
-  public featureIds: number[] = [];
+export interface SaveVehicle {
+  id: number;
+  makeId: number;
+  modelId: number;
+  isRegistered: boolean;
+  contact: Contact;
+  featureIds: number[];
 }

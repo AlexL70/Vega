@@ -1,5 +1,5 @@
-export class Contact {
-  public name: string;
-  public phone: string;
-  public email: string;
+export interface Contact {
+  name: string;
+  phone: string;
+  email: string;
 }

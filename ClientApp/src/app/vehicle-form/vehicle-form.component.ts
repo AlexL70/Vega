@@ -1,3 +1,4 @@
+import { Vehicle } from './../models/Vehicle';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastyService } from 'ng2-toasty';
@@ -19,7 +20,14 @@ export class VehicleFormComponent implements OnInit {
   makes: Make[];
   models: Model[] = [];
   features: Feature[] = [];
-  vehicle: SaveVehicle = new SaveVehicle();
+  vehicle: SaveVehicle = {
+    id: 0,
+    makeId: 0,
+    modelId: 0,
+    isRegistered: false,
+    featureIds: [],
+    contact: { name: "", phone: "", email: "" }
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -44,12 +52,24 @@ export class VehicleFormComponent implements OnInit {
         this.makes = data[0];
         this.features = data[1];
         if(this.vehicle.id)
-          this.vehicle = data[2];
+          this.setVehicle(data[2])
       }, err => {
         // console.log(err);
         if(err.status == 404)
           this.router.navigate(['/']);
       });
+  }
+
+  private setVehicle(v: Vehicle) {
+    this.vehicle.id = v.id;
+    this.vehicle.makeId = v.make.id;
+    this.vehicle.modelId = v.model.id;
+    this.vehicle.featureIds = [];
+    v.features.forEach((val, index, arr) => this.vehicle.featureIds.push(val.id));
+    this.vehicle.isRegistered = v.isRegistered;
+    this.vehicle.contact.name = v.contact.name;
+    this.vehicle.contact.email = v.contact.email;
+    this.vehicle.contact.phone = v.contact.phone;
   }
 
   onMakeChange(): void {

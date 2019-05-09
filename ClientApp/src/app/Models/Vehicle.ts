@@ -1,12 +1,12 @@
 import { KeyValuePair } from "./KeyValuePair";
 import { Contact } from "./Contact";
 
-export class Vehicle {
-  public id: number;
-  public model: KeyValuePair;
-  public make: KeyValuePair;
-  public isRegistered: boolean;
-  public features: KeyValuePair[] = [];
-  public contact: Contact;
-  public LastUpdated: string;
+export interface Vehicle {
+  id: number;
+  model: KeyValuePair;
+  make: KeyValuePair;
+  isRegistered: boolean;
+  features: KeyValuePair[];
+  contact: Contact;
+  LastUpdated: string;
 }
