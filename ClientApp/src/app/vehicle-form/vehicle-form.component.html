@@ -27,16 +27,16 @@
   </div>
   <p>Is this vehicle registered?</p>
   <label for="registered" class="radio-inline">
-      <input id="registered" name="isRegistered" type="radio" value="true" [(ngModel)]="vehicle.isRegistered"> Yes
+      <input id="registered" name="isRegistered" type="radio" [value]="true" [(ngModel)]="vehicle.isRegistered"> Yes
   </label>
   <span>&nbsp;</span>
   <label for="notRegistered" class="radio-inline">
-      <input id="notRegistered" name="isRegistered" type="radio" value="false" [(ngModel)]="vehicle.isRegistered"> No
+      <input id="notRegistered" name="isRegistered" type="radio" [value]="false" [(ngModel)]="vehicle.isRegistered"> No
   </label>
   <h2>Features</h2>
   <div *ngFor="let f of features" class="checkbox">
     <label for="feature{{ f.id }}">
-      <input id="feature{{ f.id }}" type="checkbox" (change)="onFeatureToggle(f.id, $event)"> {{ f.name }}
+      <input id="feature{{ f.id }}" type="checkbox" (change)="onFeatureToggle(f.id, $event)" [checked]="vehicle.featureIds.includes(f.id)"> {{ f.name }}
     </label>
   </div>
   <h2>Contact</h2>

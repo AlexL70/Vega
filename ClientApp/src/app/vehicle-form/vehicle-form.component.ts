@@ -51,8 +51,10 @@ export class VehicleFormComponent implements OnInit {
     Observable.forkJoin(sources).subscribe(data => {
         this.makes = data[0];
         this.features = data[1];
-        if(this.vehicle.id)
+        if(this.vehicle.id) {
           this.setVehicle(data[2])
+          this.populateModels();
+        }
       }, err => {
         // console.log(err);
         if(err.status == 404)
@@ -73,9 +75,13 @@ export class VehicleFormComponent implements OnInit {
   }
 
   onMakeChange(): void {
+    this.populateModels();
+    delete this.vehicle.modelId;
+  }
+
+  private populateModels(): void {
     var selectedMake = this.makes.find(m => m.id == this.vehicle.makeId);
     this.models = selectedMake ? selectedMake.models.slice() : [];
-    delete this.vehicle.modelId;
   }
 
   onFeatureToggle(featureId: number, event: Event): void {
