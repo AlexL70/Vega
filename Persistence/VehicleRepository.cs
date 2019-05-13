@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Vega.Core;
@@ -14,8 +15,12 @@ namespace Vega.Persistence
             _context = context;
         }
 
-        public async Task<ICollection<Vehicle>> GetVehicles() {
-            return await _context.Vehicles
+        public async Task<ICollection<Vehicle>> GetVehicles(VehicleFilter filter) {
+            IQueryable<Vehicle> vDataSet = filter.MakeId.HasValue
+                ? _context.Vehicles.Where(v => v.Model.MakeId == filter.MakeId.Value)
+                : _context.Vehicles;
+
+            return await vDataSet
                 .Include(v => v.Features).ThenInclude(f => f.Feature)
                 .Include(v => v.Model).ThenInclude(m => m.Make)
                 .ToListAsync();

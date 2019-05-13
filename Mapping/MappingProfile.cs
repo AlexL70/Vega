@@ -9,6 +9,7 @@ namespace Vega.Mapping
     {
         public MappingProfile()
         {
+            //  Domain Model => Resource
             CreateMap<Feature, KeyValuePairResource>();
             CreateMap<Model, KeyValuePairResource>();
             CreateMap<Make, MakeResource>();
@@ -37,7 +38,9 @@ namespace Vega.Mapping
                         Name = f.Feature.Name
                     })))
                 .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make));
+            CreateMap<VehicleFilter, VehicleFilterResource>();
 
+            //  Resource => Domain Model
             CreateMap<SaveVehicleResource, Vehicle>()
                 .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.Contact.Name))
                 .ForMember(dest => dest.ContactPhone, opt => opt.MapFrom(src => src.Contact.Phone))
@@ -58,6 +61,7 @@ namespace Vega.Mapping
                     foreach(var feature in featuresToAdd)
                         v.Features.Add(feature);
                 });
+            CreateMap<VehicleFilterResource, VehicleFilter>();
         }
     }
 }
