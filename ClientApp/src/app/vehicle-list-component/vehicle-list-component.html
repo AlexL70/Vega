@@ -4,13 +4,16 @@
     New Vehicle
   </a>
 </p>
-<div class="form-group well">
-  <label for="make">Make</label>
-  <select name="make" id="make" class="form-control"
-    [(ngModel)]="filter.makeId" (change)="onFilterChange()">
-    <option value=""></option>
-    <option *ngFor="let m of makes" value="{{m.id}}">{{ m.name }}</option>
-  </select>
+<div class="well">
+  <div class="form-group">
+    <label for="make">Make</label>
+    <select name="make" id="make" class="form-control"
+      [(ngModel)]="filter.makeId" (change)="onFilterChange()">
+      <option value=""></option>
+      <option *ngFor="let m of makes" value="{{m.id}}">{{ m.name }}</option>
+    </select>
+  </div>
+  <button class="btn btn-default" (click)="resetFilter()">Reset</button>
 </div>
 <table id="vehicles" class="table table-bordered table-hover">
   <thead class="h4">
