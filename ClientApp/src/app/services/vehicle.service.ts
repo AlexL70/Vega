@@ -1,3 +1,4 @@
+import { VehicleFilter } from './../models/vehicleFilter';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,7 +11,7 @@ import { Vehicle } from '../Models/Vehicle';
   providedIn: 'root'
 })
 export class VehicleService {
-
+  private readonly vehicleEndpoint: string = '/api/vehicles';
   constructor(private http: HttpClient) {}
 
   getMakes(): Observable<Make[]> {
@@ -21,23 +22,34 @@ export class VehicleService {
     return <Observable<Feature[]>> this.http.get('/api/features');
   }
 
-  getVehicles(): Observable<Vehicle[]> {
-    return<Observable<Vehicle[]>> this.http.get('/api/vehicles');
+  getVehicles(filter: VehicleFilter): Observable<Vehicle[]> {
+    return<Observable<Vehicle[]>> this.http.get(`${this.vehicleEndpoint}?${this.toQueryString(filter)}`);
+  }
+
+  private toQueryString(filter: any): string {
+    var parts: any[] = [];
+    for(var prop in filter) {
+      var value = filter[prop];
+      if(value !== null && value !== undefined)
+        parts.push(`${encodeURIComponent(prop)}=${encodeURIComponent(value)}`);
+    }
+
+    return parts.join('&');
   }
 
   create(vehicle: SaveVehicle): Observable<Vehicle> {
-    return <Observable<Vehicle>> this.http.post('/api/vehicles', vehicle);
+    return <Observable<Vehicle>> this.http.post(this.vehicleEndpoint, vehicle);
   }
 
   update(vehicle: SaveVehicle): Observable<Vehicle> {
-    return <Observable<Vehicle>> this.http.put('/api/vehicles/' + vehicle.id, vehicle);
+    return <Observable<Vehicle>> this.http.put(`${this.vehicleEndpoint}/${vehicle.id}`, vehicle);
   }
 
   delete(id: number): Observable<Vehicle> {
-    return <Observable<Vehicle>> this.http.delete('/api/vehicles/' + id);
+    return <Observable<Vehicle>> this.http.delete(`${this.vehicleEndpoint}/${id}`);
   }
 
   getVehicle(id: number) {
-    return <Observable<SaveVehicle>> this.http.get('/api/vehicles/' + id);
+    return <Observable<SaveVehicle>> this.http.get(`${this.vehicleEndpoint}/${id}`);
   }
 }

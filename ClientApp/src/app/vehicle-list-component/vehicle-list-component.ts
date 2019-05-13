@@ -1,3 +1,4 @@
+import { VehicleFilter } from './../models/vehicleFilter';
 import { Component, OnInit } from '@angular/core';
 
 import { VehicleService } from './../services/vehicle.service';
@@ -11,35 +12,28 @@ import { KeyValuePair } from './../models/KeyValuePair';
 })
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
-  allVehicles: Vehicle[];
   makes: KeyValuePair[];
-  filter: any = {};
+  filter: VehicleFilter = { makeId: null };
 
   constructor(private vehicleService: VehicleService) { }
 
   ngOnInit() {
-    this.vehicleService.getVehicles()
-      .subscribe(vehicles => this.vehicles = this.allVehicles = vehicles);
     this.vehicleService.getMakes()
       .subscribe(makes => this.makes = makes);
+    this.populateVehicles();
   }
 
   onFilterChange() {
-    var vehicles = this.allVehicles;
+    this.populateVehicles();
+  }
 
-    if(this.filter.makeId) {
-      // console.log(this.filter.makeId);
-      vehicles = vehicles.filter(val =>
-        val.make.id === +this.filter.makeId );
-    }
-
-    //  More filters could be added here if necessary
-
-    this.vehicles = vehicles;
+  private populateVehicles() {
+    this.vehicleService.getVehicles(this.filter)
+      .subscribe(vehicles => this.vehicles = vehicles);
   }
 
   resetFilter() {
-    this.filter = {};
+    this.filter = { makeId: null };
     this.onFilterChange();
   }
 }
