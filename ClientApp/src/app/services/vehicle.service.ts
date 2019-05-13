@@ -21,6 +21,10 @@ export class VehicleService {
     return <Observable<Feature[]>> this.http.get('/api/features');
   }
 
+  getVehicles(): Observable<Vehicle[]> {
+    return<Observable<Vehicle[]>> this.http.get('/api/vehicles');
+  }
+
   create(vehicle: SaveVehicle): Observable<Vehicle> {
     return <Observable<Vehicle>> this.http.post('/api/vehicles', vehicle);
   }

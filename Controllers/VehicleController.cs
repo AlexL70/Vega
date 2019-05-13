@@ -25,10 +25,10 @@ namespace Vega.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetVehicles() {
+        public async Task<IEnumerable<VehicleResource>> GetVehicles() {
             var vehicles = await _repository.GetVehicles();
 
-            return Ok(_mapper.Map<ICollection<Vehicle>, List<VehicleResource>>(vehicles));
+            return _mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehicles);
         }
 
         [HttpGet("{id}")]
