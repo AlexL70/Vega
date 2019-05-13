@@ -38,7 +38,7 @@ namespace Vega.Mapping
                         Name = f.Feature.Name
                     })))
                 .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Model.Make));
-            CreateMap<VehicleFilter, VehicleFilterResource>();
+            CreateMap<VehicleQuery, VehicleQueryResource>();
 
             //  Resource => Domain Model
             CreateMap<SaveVehicleResource, Vehicle>()
@@ -61,7 +61,7 @@ namespace Vega.Mapping
                     foreach(var feature in featuresToAdd)
                         v.Features.Add(feature);
                 });
-            CreateMap<VehicleFilterResource, VehicleFilter>();
+            CreateMap<VehicleQueryResource, VehicleQuery>();
         }
     }
 }
