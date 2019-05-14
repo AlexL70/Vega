@@ -19,11 +19,12 @@ namespace Vega.Persistence
         }
 
         public async Task<ICollection<Vehicle>> GetVehicles(VehicleQuery queryObj) {
-            IQueryable<Vehicle> vDataSet = queryObj.MakeId.HasValue
-                ? _context.Vehicles.Where(v => v.Model.MakeId == queryObj.MakeId.Value)
-                : _context.Vehicles;
+            IQueryable<Vehicle> query = _context.Vehicles;
 
-            vDataSet = vDataSet
+            if(queryObj?.MakeId.HasValue ?? false)
+                query = query.Where(v => v.Model.MakeId == queryObj.MakeId.Value);
+
+            query = query
                 .Include(v => v.Features).ThenInclude(f => f.Feature)
                 .Include(v => v.Model).ThenInclude(m => m.Make)
                 .AsQueryable();
@@ -35,17 +36,26 @@ namespace Vega.Persistence
                 [nameof(Vehicle.Id).ToLower()] = v => v.Id
             };
 
+            query = ApplyOrdering(queryObj, query, orderMapping);
+
+            return await query
+                .ToListAsync();
+        }
+
+        private IQueryable<Vehicle> ApplyOrdering(
+            VehicleQuery queryObj,
+            IQueryable<Vehicle> query,
+            Dictionary<string, Expression<Func<Vehicle, object>>> orderMapping) {
             if (orderMapping.ContainsKey(queryObj?.SortBy?.ToLower() ?? "")) {
                 var lambda = orderMapping[queryObj.SortBy.ToLower()];
                 if(lambda != null)
-                    vDataSet = queryObj.IsAscending
-                        ? vDataSet.OrderBy(lambda)
-                        : vDataSet.OrderByDescending(lambda);
+                    query = queryObj.IsAscending
+                        ? query.OrderBy(lambda)
+                        : query.OrderByDescending(lambda);
             }
-
-            return await vDataSet
-                .ToListAsync();
+            return query;
         }
+
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true) {
             if(includeRelated)
                 return await _context.Vehicles
