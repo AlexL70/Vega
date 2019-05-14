@@ -17,8 +17,18 @@
 </div>
 <table id="vehicles" class="table table-bordered table-hover">
   <thead class="h4">
-    <th (click)="sortBy('id')">Id</th>
-    <th (click)="sortBy('make')">Make</th>
+    <th (click)="sortBy('id')">
+      Id
+      <i *ngIf="query.sortBy === 'id'" class="fa"
+      [class.fa-sort-asc]="query.isAscending"
+      [class.fa-sort-desc]="!query.isAscending"></i>
+    </th>
+    <th (click)="sortBy('make')">
+      Make
+      <i *ngIf="query.sortBy === 'make'" class="fa"
+      [class.fa-sort-asc]="query.isAscending"
+      [class.fa-sort-desc]="!query.isAscending"></i>
+    </th>
     <th (click)="sortBy('model')">Model</th>
     <th (click)="sortBy('contactName')">Contact Name</th>
     <th>&nbsp;</th>
