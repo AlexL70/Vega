@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Vega.Core;
 using Vega.Core.Models;
 using Vega.Core.Models.Resources;
+using Vega.Extensions;
 
 namespace Vega.Persistence
 {
@@ -36,24 +37,10 @@ namespace Vega.Persistence
                 [nameof(Vehicle.Id).ToLower()] = v => v.Id
             };
 
-            query = ApplyOrdering(queryObj, query, orderMapping);
+            query = query.ApplyOrdering(queryObj, orderMapping);
 
             return await query
                 .ToListAsync();
-        }
-
-        private IQueryable<Vehicle> ApplyOrdering(
-            VehicleQuery queryObj,
-            IQueryable<Vehicle> query,
-            Dictionary<string, Expression<Func<Vehicle, object>>> orderMapping) {
-            if (orderMapping.ContainsKey(queryObj?.SortBy?.ToLower() ?? "")) {
-                var lambda = orderMapping[queryObj.SortBy.ToLower()];
-                if(lambda != null)
-                    query = queryObj.IsAscending
-                        ? query.OrderBy(lambda)
-                        : query.OrderByDescending(lambda);
-            }
-            return query;
         }
 
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true) {

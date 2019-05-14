@@ -1,6 +1,7 @@
+using Vega.Extensions;
 namespace Vega.Core.Models
 {
-    public class VehicleQuery
+    public class VehicleQuery : IOrderObject
     {
         public int? MakeId { get; set; }
         
