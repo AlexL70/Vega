@@ -7,7 +7,7 @@ export class AppErrorHandler implements ErrorHandler {
     private ngZone: NgZone) {}
 
   handleError(error: any): void {
-    if(isDevMode) {
+    if(!isDevMode) {
       const eventId = Sentry.captureException(error.originalError || error);
       //Sentry.showReportDialog({ eventId });
     } else {
