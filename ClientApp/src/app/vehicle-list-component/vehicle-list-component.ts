@@ -1,4 +1,4 @@
-import { VehicleFilter } from './../models/vehicleFilter';
+import { VehicleQuery } from './../models/VehicleQuery';
 import { Component, OnInit } from '@angular/core';
 
 import { VehicleService } from './../services/vehicle.service';
@@ -13,7 +13,7 @@ import { KeyValuePair } from './../models/KeyValuePair';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
-  filter: VehicleFilter = { makeId: null };
+  query: VehicleQuery = { makeId: null, sortBy: null, isAscending: null };
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -27,13 +27,23 @@ export class VehicleListComponent implements OnInit {
     this.populateVehicles();
   }
 
+  sortBy(columnName: string) {
+    if(this.query.sortBy === columnName) {
+      this.query.isAscending = !this.query.isAscending;
+    } else {
+      this.query.isAscending = true;
+      this.query.sortBy = columnName;
+    }
+    this.populateVehicles();
+  }
+
   private populateVehicles() {
-    this.vehicleService.getVehicles(this.filter)
+    this.vehicleService.getVehicles(this.query)
       .subscribe(vehicles => this.vehicles = vehicles);
   }
 
   resetFilter() {
-    this.filter = { makeId: null };
+    this.query.makeId = null;
     this.onFilterChange();
   }
 }

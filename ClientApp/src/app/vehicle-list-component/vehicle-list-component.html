@@ -8,7 +8,7 @@
   <div class="form-group">
     <label for="make">Make</label>
     <select name="make" id="make" class="form-control"
-      [(ngModel)]="filter.makeId" (change)="onFilterChange()">
+      [(ngModel)]="query.makeId" (change)="onFilterChange()">
       <option value=""></option>
       <option *ngFor="let m of makes" value="{{m.id}}">{{ m.name }}</option>
     </select>
@@ -17,10 +17,10 @@
 </div>
 <table id="vehicles" class="table table-bordered table-hover">
   <thead class="h4">
-    <th>Id</th>
-    <th>Make</th>
-    <th>Model</th>
-    <th>Contact Name</th>
+    <th (click)="sortBy('id')">Id</th>
+    <th (click)="sortBy('make')">Make</th>
+    <th (click)="sortBy('model')">Model</th>
+    <th (click)="sortBy('contactName')">Contact Name</th>
     <th>&nbsp;</th>
   </thead>
   <tbody>
