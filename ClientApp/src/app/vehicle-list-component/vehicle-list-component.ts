@@ -1,3 +1,4 @@
+import { ColumnHeader } from './../models/ColumnHeader';
 import { VehicleQuery } from './../models/VehicleQuery';
 import { Component, OnInit } from '@angular/core';
 
@@ -14,6 +15,13 @@ export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
   query: VehicleQuery = { makeId: null, sortBy: null, isAscending: null };
+  columns: ColumnHeader[] = [
+    { title: 'Id', sortKey: 'id', isSortable: true},
+    { title: 'Make', sortKey: 'make', isSortable: true},
+    { title: 'Model', sortKey: 'model', isSortable: true},
+    { title: 'Contact Name', sortKey: 'contactName', isSortable: true},
+    { title: '', sortKey: null, isSortable: false},
+  ];
 
   constructor(private vehicleService: VehicleService) { }
 

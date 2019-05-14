@@ -17,21 +17,15 @@
 </div>
 <table id="vehicles" class="table table-bordered table-hover">
   <thead class="h4">
-    <th (click)="sortBy('id')">
-      Id
-      <i *ngIf="query.sortBy === 'id'" class="fa"
-      [class.fa-sort-asc]="query.isAscending"
-      [class.fa-sort-desc]="!query.isAscending"></i>
+    <th *ngFor="let c of columns">
+      <div *ngIf="c.isSortable" (click)="sortBy(c.sortKey)">
+          {{ c.title }}
+          <i *ngIf="query.sortBy === c.sortKey" class="fa"
+          [class.fa-sort-asc]="query.isAscending"
+          [class.fa-sort-desc]="!query.isAscending"></i>
+      </div>
+      <div *ngIf="!c.isSortable">{{ c.title }}</div>
     </th>
-    <th (click)="sortBy('make')">
-      Make
-      <i *ngIf="query.sortBy === 'make'" class="fa"
-      [class.fa-sort-asc]="query.isAscending"
-      [class.fa-sort-desc]="!query.isAscending"></i>
-    </th>
-    <th (click)="sortBy('model')">Model</th>
-    <th (click)="sortBy('contactName')">Contact Name</th>
-    <th>&nbsp;</th>
   </thead>
   <tbody>
     <tr *ngFor="let v of vehicles">
