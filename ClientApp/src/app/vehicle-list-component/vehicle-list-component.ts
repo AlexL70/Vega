@@ -14,7 +14,13 @@ import { KeyValuePair } from './../models/KeyValuePair';
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
   makes: KeyValuePair[];
-  query: VehicleQuery = { makeId: null, sortBy: null, isAscending: null };
+  query: VehicleQuery = {
+    makeId: null,
+    sortBy: null,
+    isAscending: null,
+    pageSize: 5,
+    page: 1
+  };
   columns: ColumnHeader[] = [
     { title: 'Id', sortKey: 'id', isSortable: true},
     { title: 'Make', sortKey: 'make', isSortable: true},
@@ -53,5 +59,10 @@ export class VehicleListComponent implements OnInit {
   resetFilter() {
     this.query.makeId = null;
     this.onFilterChange();
+  }
+
+  onPageChanges(page: number): void {
+    this.query.page = page;
+    this.populateVehicles();
   }
 }

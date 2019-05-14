@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-pagination',
-  template: './pagination.component.html'
+  selector: 'pagination',
+  templateUrl: './pagination.component.html'
 })
 export class PaginationComponent implements OnChanges {
   @Input('total-items') totalItems: number;

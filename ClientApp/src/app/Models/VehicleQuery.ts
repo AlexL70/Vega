@@ -3,4 +3,6 @@ export interface VehicleQuery {
 
   sortBy: string;
   isAscending: boolean;
+  pageSize: number;
+  page: number;
 }

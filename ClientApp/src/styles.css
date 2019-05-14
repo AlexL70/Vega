@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+.nav-item.active {
+  background-color: navy;
+  color: lightyellow;
+}
+
+.nav-item {
+  background-color:lightblue;
+  color: navy;
+}
+
+.nav-item.disabled {
+  color: rgb(173, 196, 204);
+}
