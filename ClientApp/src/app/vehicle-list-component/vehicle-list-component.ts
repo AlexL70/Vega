@@ -28,6 +28,7 @@ export class VehicleListComponent implements OnInit {
     { title: 'Contact Name', sortKey: 'contactName', isSortable: true},
     { title: '', sortKey: null, isSortable: false},
   ];
+  totalCount: number;
 
   constructor(private vehicleService: VehicleService) { }
 
@@ -53,7 +54,10 @@ export class VehicleListComponent implements OnInit {
 
   private populateVehicles() {
     this.vehicleService.getVehicles(this.query)
-      .subscribe(vehicles => this.vehicles = vehicles);
+      .subscribe(result => {
+        this.vehicles = result.items;
+        this.totalCount = result.totalItems;
+      });
   }
 
   resetFilter() {

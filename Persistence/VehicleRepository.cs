@@ -19,11 +19,13 @@ namespace Vega.Persistence
             _context = context;
         }
 
-        public async Task<ICollection<Vehicle>> GetVehicles(VehicleQuery queryObj) {
+        public async Task<QueryResult<Vehicle>> GetVehicles(VehicleQuery queryObj) {
             IQueryable<Vehicle> query = _context.Vehicles;
 
             if(queryObj?.MakeId.HasValue ?? false)
                 query = query.Where(v => v.Model.MakeId == queryObj.MakeId.Value);
+
+            var count = await query.CountAsync();
 
             query = query
                 .Include(v => v.Features).ThenInclude(f => f.Feature)
@@ -41,8 +43,10 @@ namespace Vega.Persistence
 
             query = query.ApplyPaging(queryObj);
 
-            return await query
-                .ToListAsync();
+            return new QueryResult<Vehicle> {
+                TotalItems = count,
+                Items = await query.ToListAsync()
+            };
         }
 
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true) {

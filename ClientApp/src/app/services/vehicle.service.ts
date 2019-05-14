@@ -6,6 +6,7 @@ import { Feature } from '../Models/Feature';
 import { SaveVehicle } from '../Models/SaveVehicle';
 import { Vehicle } from '../Models/Vehicle';
 import { VehicleQuery } from '../models/VehicleQuery';
+import { QueryResult } from '../models/QueryResult';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,8 @@ export class VehicleService {
     return <Observable<Feature[]>> this.http.get('/api/features');
   }
 
-  getVehicles(query: VehicleQuery): Observable<Vehicle[]> {
-    return<Observable<Vehicle[]>> this.http.get(`${this.vehicleEndpoint}?${this.toQueryString(query)}`);
+  getVehicles(query: VehicleQuery): Observable<QueryResult<Vehicle>> {
+    return <Observable<QueryResult<Vehicle>>> this.http.get(`${this.vehicleEndpoint}?${this.toQueryString(query)}`);
   }
 
   private toQueryString(query: VehicleQuery): string {
