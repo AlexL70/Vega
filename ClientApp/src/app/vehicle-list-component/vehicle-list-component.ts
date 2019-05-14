@@ -39,6 +39,7 @@ export class VehicleListComponent implements OnInit {
   }
 
   onFilterChange() {
+    this.query.page = 1;
     this.populateVehicles();
   }
 
