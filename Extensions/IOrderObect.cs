@@ -2,7 +2,7 @@ namespace Vega.Extensions
 {
     public interface IOrderObject
     {
-        string SortBy { get; set; }
-        bool IsAscending { get; set; }
+        string SortBy { get; }
+        bool IsAscending { get; }
     }
 }
