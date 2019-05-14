@@ -16,6 +16,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
 import { VehicleListComponent } from './vehicle-list-component/vehicle-list-component';
+import { PaginationComponent } from './components/shared/pagination/pagination.component';
 
 Sentry.init({
   dsn: "https://f744306dfa3249e8a86ff4b4b14ef880@sentry.io/1455076"
@@ -28,7 +29,8 @@ Sentry.init({
     CounterComponent,
     FetchDataComponent,
     VehicleFormComponent,
-    VehicleListComponent
+    VehicleListComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
