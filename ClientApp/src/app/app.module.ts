@@ -10,12 +10,12 @@ import * as Sentry from '@sentry/browser';
 
 import { VehicleService } from './services/vehicle.service';
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
-import { VehicleFormComponent } from './vehicle-form/vehicle-form.component';
-import { VehicleListComponent } from './vehicle-list-component/vehicle-list-component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { HomeComponent } from './components/home/home.component';
+import { CounterComponent } from './components/counter/counter.component';
+import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
+import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
+import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
 
 Sentry.init({

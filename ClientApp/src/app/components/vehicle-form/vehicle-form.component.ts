@@ -1,13 +1,13 @@
-import { Vehicle } from './../models/Vehicle';
+import { Vehicle } from '../../models/Vehicle';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastyService } from 'ng2-toasty';
 
-import { Make } from '../models/Make';
-import { Model } from '../models/Model';
-import { Feature } from '../models/Feature';
-import { SaveVehicle } from '../models/SaveVehicle';
-import { VehicleService } from '../services/vehicle.service';
+import { Make } from '../../models/Make';
+import { Model } from '../../models/Model';
+import { Feature } from '../../models/Feature';
+import { SaveVehicle } from '../../models/SaveVehicle';
+import { VehicleService } from '../../services/vehicle.service';
 import { Observable } from 'rxjs';
 import 'rxjs/add/observable/forkJoin';
 

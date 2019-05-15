@@ -1,15 +1,15 @@
-import { ColumnHeader } from './../models/ColumnHeader';
-import { VehicleQuery } from './../models/VehicleQuery';
+import { ColumnHeader } from '../../models/ColumnHeader';
+import { VehicleQuery } from '../../models/VehicleQuery';
 import { Component, OnInit } from '@angular/core';
 
-import { VehicleService } from './../services/vehicle.service';
-import { Vehicle } from './../models/Vehicle';
-import { KeyValuePair } from './../models/KeyValuePair';
+import { VehicleService } from '../../services/vehicle.service';
+import { Vehicle } from '../../models/Vehicle';
+import { KeyValuePair } from '../../models/KeyValuePair';
 
 @Component({
   selector: 'app-vehicle-list-component',
-  templateUrl: './vehicle-list-component.html',
-  styleUrls: ['./vehicle-list-component.css']
+  templateUrl: './vehicle-list.component.html',
+  styleUrls: ['./vehicle-list.component.css']
 })
 export class VehicleListComponent implements OnInit {
   vehicles: Vehicle[];
