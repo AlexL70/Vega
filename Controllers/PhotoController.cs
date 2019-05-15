@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,10 @@ using Vega.Core.Models.Resources;
 namespace Vega.Controllers {
     [Route ("/api/vehicles/{vehicleId}/photos")]
     public class PhotoController : Controller {
+        private readonly int MAX_FILE_SIZE = 10 * 1024 * 1024;
+        private readonly string[] ACCEPTED_FILE_TYPES = new string[] {
+            ".jpg", ".jpeg", ".bmp", ".png"
+        };
         private readonly IHostingEnvironment _hostEnv;
 
         private readonly string _uploadsFolderPath;
@@ -35,6 +40,15 @@ namespace Vega.Controllers {
             var vehicle = await _vehicleRepository.GetVehicle (vehicleId, includeRelated : false);
             if (vehicle == null)
                 return NotFound ($"Vehicle with Id = {vehicleId} not found.");
+
+            if (file == null)
+                return BadRequest("Null file.");
+            if (file.Length == 0)
+                return BadRequest("Empty file.");
+            if (file.Length > MAX_FILE_SIZE)
+                return BadRequest($"File is too big. Max size alowed is {MAX_FILE_SIZE} bytes.");
+            if(!ACCEPTED_FILE_TYPES.Contains(Path.GetExtension(file.Name)))
+                return BadRequest($"Invalid file type.");
 
             var photo = new Photo {
                 Id = 0,
