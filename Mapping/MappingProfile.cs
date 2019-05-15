@@ -15,6 +15,7 @@ namespace Vega.Mapping
             CreateMap<Model, KeyValuePairResource>();
             CreateMap<Make, MakeResource>();
             CreateMap<Make, KeyValuePairResource>();
+            CreateMap<Photo, PhotoResource>();
 
             CreateMap<Vehicle, SaveVehicleResource>()
                 .ForMember(dest => dest.FeatureIds, opt => opt.MapFrom(src =>
