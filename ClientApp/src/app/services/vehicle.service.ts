@@ -51,6 +51,6 @@ export class VehicleService {
   }
 
   getVehicle(id: number) {
-    return <Observable<SaveVehicle>> this.http.get(`${this.vehicleEndpoint}/${id}`);
+    return <Observable<Vehicle>> this.http.get(`${this.vehicleEndpoint}/${id}`);
   }
 }

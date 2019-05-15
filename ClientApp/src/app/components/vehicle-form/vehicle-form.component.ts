@@ -1,15 +1,15 @@
-import { Vehicle } from '../../models/Vehicle';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastyService } from 'ng2-toasty';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/forkJoin';
 
 import { Make } from '../../models/Make';
 import { Model } from '../../models/Model';
 import { Feature } from '../../models/Feature';
+import { Vehicle } from '../../models/Vehicle';
 import { SaveVehicle } from '../../models/SaveVehicle';
 import { VehicleService } from '../../services/vehicle.service';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/forkJoin';
 
 @Component({
   selector: 'app-vehicle-form',
@@ -28,6 +28,7 @@ export class VehicleFormComponent implements OnInit {
     featureIds: [],
     contact: { name: "", phone: "", email: "" }
   };
+  isDevMode: boolean = isDevMode();
 
   constructor(
     private route: ActivatedRoute,
@@ -95,46 +96,33 @@ export class VehicleFormComponent implements OnInit {
   }
 
   submit(): void {
-    if(this.vehicle.id) {
-      this.vehicleService.update(this.vehicle)
-        .subscribe(
-          x => {
-            this.toastyService.success({
-              title: "Saved",
-              msg: "Vehicle is successfully updated.",
-              showClose: true,
-              timeout: 5000,
-              theme: 'bootstrap'
-            });
-        });
-    } else {
-      this.vehicleService.create(this.vehicle)
-        .subscribe(
-          x => {
-            //console.log(x),
-            this.toastyService.success({
-              title: "Saved",
-              msg: "Vehicle is successfully saved.",
-              showClose: true,
-              timeout: 5000,
-              theme: 'bootstrap'
-            });
-        });
+    let title = "Saved";
+    let message = "Vehicle is successfully updated.";
+    let result$ = this.vehicle.id
+      ? this.vehicleService.update(this.vehicle)
+      : this.vehicleService.create(this.vehicle);
+    if (!this.vehicle.id) {
+      title = "Created";
+      message = "Vehicle is successfully created.";
     }
-  }
-
-  delete() {
-    if(confirm("Are you sure?")) {
-      this.vehicleService.delete(this.vehicle.id)
-        .subscribe(x => {
+    result$.subscribe(
+        v => {
           this.toastyService.success({
-            title: "Saved",
-            msg: "Vehicle is successfully deleted.",
+            title: title,
+            msg: message,
             showClose: true,
             timeout: 5000,
             theme: 'bootstrap'
           });
+          this.router.navigate(['/vehicles/', v.id]);
       });
+  }
+
+  cancel(): void {
+    if (this.vehicle.id) {
+      this.router.navigate(['/vehicles/', this.vehicle.id])
+    } else {
+      this.router.navigate(['/vehicles']);
     }
   }
 }

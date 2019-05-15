@@ -1,5 +1,5 @@
 <h1>New Vehicle</h1>
-<p>{{ vehicle | json }}</p>
+<p *ngIf="isDevMode">{{ vehicle | json }}</p>
 <form (ngSubmit)="submit()" #f="ngForm">
   <div class="form-group">
     <label for="make">Make</label>
@@ -64,6 +64,6 @@
   <div class="form-group">
       <button [disabled]="!f.valid" type="submit" class="btn btn-primary">Save</button>
       &nbsp;
-      <button *ngIf="vehicle.id" type="button" class="btn btn-danger" (click)="delete()">Delete</button>
+      <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
   </div>
 </form>

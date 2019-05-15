@@ -1,0 +1,48 @@
+<h2>Vehicle</h2>
+<p  *ngIf="isDevMode">{{ vehicle | json }}</p>
+<!-- Tabs -->
+<ul role="tabpanel" class="nav nav-tabs">
+  <li class="nav-item">
+    <a [class]="activeTab == 'basics' ? 'nav-link active' : 'nav-link'"
+      role="tab" data-toggle="tab" (click)="toBasics()">
+      Basics
+    </a>
+  </li>
+  <li class="nav-item">
+    <a [class]="activeTab == 'picture' ? 'nav-link active' : 'nav-link'"
+      role="tab" data-toggle="tab" (click)="toPicture()">
+      Picture
+    </a>
+  </li>
+</ul>
+<!-- Tab panes -->
+<div class="tab-content" *ngIf="vehicle">
+    <div role="tabpanel" [class]="activeTab == 'basics' ? 'tab-pane active' : 'tab-pane'" id="{{basics}}">
+      <h2>Basics</h2>
+      <ul>
+        <li>Make: {{ vehicle.make.name }}</li>
+        <li>Model: {{ vehicle.model.name }}</li>
+        <li>Registered: {{ vehicle.isRegistered ? 'Yes' : 'No' }}</li>
+      </ul>
+      <h2>Features</h2>
+      <ul>
+        <li *ngFor="let f of vehicle.features">{{ f.name }}</li>
+      </ul>
+      <h2>Contact</h2>
+      <ul>
+        <li>Contact name: {{ vehicle.contact.name }}</li>
+        <li>Contact phone: {{ vehicle.contact.phone }}</li>
+        <li *ngIf="vehicle.contact.email">Contact email: {{ vehicle.contact.email }}</li>
+      </ul>
+    </div>
+    <div role="tabpanel" [class]="activeTab == 'picture' ? 'tab-pane active' : 'tab-pane'" id="{{picture}}">
+      <h2>Picture</h2>
+    </div>
+    <div>
+      <button class="btn btn-primary" (click)="edit()">Edit</button>
+      &nbsp;
+      <button class="btn btn-danger" (click)="delete()">Delete</button>
+      &nbsp;
+      <button class="btn btn-default" (click)="toList()">View All Vehicles</button>
+    </div>
+</div>
