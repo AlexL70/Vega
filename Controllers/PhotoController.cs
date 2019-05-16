@@ -1,12 +1,13 @@
 using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Vega.Common;
 using Vega.Core;
 using Vega.Core.Models;
 using Vega.Core.Models.Resources;
@@ -14,21 +15,19 @@ using Vega.Core.Models.Resources;
 namespace Vega.Controllers {
     [Route ("/api/vehicles/{vehicleId}/photos")]
     public class PhotoController : Controller {
-        private readonly int MAX_FILE_SIZE = 10 * 1024 * 1024;
-        private readonly string[] ACCEPTED_FILE_TYPES = new string[] {
-            ".jpg", ".jpeg", ".bmp", ".png"
-        };
         private readonly IHostingEnvironment _hostEnv;
-
         private readonly string _uploadsFolderPath;
         private readonly IVehicleRepository _vehicleRepository;
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
+        private readonly PhotoSettings _settings;
 
         public PhotoController (IHostingEnvironment hostEnv,
             IVehicleRepository vehicleRepository,
-            IUnitOfWork uow, IMapper mapper) {
+            IUnitOfWork uow, IMapper mapper,
+            IOptionsSnapshot<PhotoSettings> options) {
             this._mapper = mapper;
+            _settings = options.Value;
             this._uow = uow;
             this._vehicleRepository = vehicleRepository;
             this._hostEnv = hostEnv;
@@ -45,9 +44,9 @@ namespace Vega.Controllers {
                 return BadRequest("Null file.");
             if (file.Length == 0)
                 return BadRequest("Empty file.");
-            if (file.Length > MAX_FILE_SIZE)
-                return BadRequest($"File is too big. Max size alowed is {MAX_FILE_SIZE} bytes.");
-            if(!ACCEPTED_FILE_TYPES.Contains(Path.GetExtension(file.Name)))
+            if (file.Length > _settings.MaxBytes)
+                return BadRequest($"File is too big. Max size alowed is {_settings.MaxBytes} bytes.");
+            if(!_settings.IsAcceptedFileType(file.Name))
                 return BadRequest($"Invalid file type.");
 
             var photo = new Photo {
