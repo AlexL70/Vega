@@ -37,6 +37,7 @@
     </div>
     <div role="tabpanel" [class]="activeTab == 'picture' ? 'tab-pane active' : 'tab-pane'" id="{{picture}}">
       <h2>Picture</h2>
+      <input type="file" (change)="uploadPhoto()" #fileInput>
     </div>
     <div>
       <button class="btn btn-primary" (click)="edit()">Edit</button>

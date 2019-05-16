@@ -46,7 +46,7 @@ namespace Vega.Controllers {
                 return BadRequest("Empty file.");
             if (file.Length > _settings.MaxBytes)
                 return BadRequest($"File is too big. Max size alowed is {_settings.MaxBytes} bytes.");
-            if(!_settings.IsAcceptedFileType(file.Name))
+            if(!_settings.IsAcceptedFileType(file.FileName))
                 return BadRequest($"Invalid file type.");
 
             var photo = new Photo {
