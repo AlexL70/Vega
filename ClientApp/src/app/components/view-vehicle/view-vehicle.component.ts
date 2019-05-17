@@ -12,6 +12,7 @@ import { Vehicle } from './../../models/Vehicle';
 export class ViewVehicleComponent implements OnInit {
   vehicle: Vehicle;
   photos: any[] = [];
+  progress: number = 0;
   vehicleId: number;
   @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -75,8 +76,9 @@ export class ViewVehicleComponent implements OnInit {
     this.photoService.upload(this.vehicleId, file,
       event => {
         // Compute and show the % done:
-        const percentDone = Math.round(100 * event.loaded / event.total);
-        console.log(`File "${file.name}" is ${percentDone}% uploaded.`);
+        this.progress = Math.round(100 * event.loaded / event.total);
+        if(isDevMode)
+          console.log(`File "${file.name}" is ${this.progress}% uploaded.`);
       },
       event => this.photos.push(event.body));
   }
