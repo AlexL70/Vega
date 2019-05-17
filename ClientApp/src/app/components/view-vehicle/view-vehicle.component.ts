@@ -71,8 +71,14 @@ export class ViewVehicleComponent implements OnInit {
 
   uploadPhoto() {
     let nativeELement: HTMLInputElement = this.fileInput.nativeElement;
-    this.photoService.upload(this.vehicleId, nativeELement.files[0])
-      .subscribe(photo => this.photos.push(photo));
+    let file = nativeELement.files[0];
+    this.photoService.upload(this.vehicleId, file,
+      event => {
+        // Compute and show the % done:
+        const percentDone = Math.round(100 * event.loaded / event.total);
+        console.log(`File "${file.name}" is ${percentDone}% uploaded.`);
+      },
+      event => this.photos.push(event.body));
   }
 
   toList() {
