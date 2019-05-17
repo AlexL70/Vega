@@ -11,6 +11,7 @@ import { Vehicle } from './../../models/Vehicle';
 })
 export class ViewVehicleComponent implements OnInit {
   vehicle: Vehicle;
+  photos: any[] = [];
   vehicleId: number;
   @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -44,6 +45,9 @@ export class ViewVehicleComponent implements OnInit {
           }
         }
       );
+
+    this.photoService.getPhotos(this.vehicleId)
+      .subscribe(p => this.photos = <any[]>p);
   }
 
   edit() {
@@ -68,7 +72,7 @@ export class ViewVehicleComponent implements OnInit {
   uploadPhoto() {
     let nativeELement: HTMLInputElement = this.fileInput.nativeElement;
     this.photoService.upload(this.vehicleId, nativeELement.files[0])
-      .subscribe(x => console.log(x));
+      .subscribe(photo => this.photos.push(photo));
   }
 
   toList() {

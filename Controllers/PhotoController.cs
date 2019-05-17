@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,20 +19,23 @@ namespace Vega.Controllers {
         private readonly IHostingEnvironment _hostEnv;
         private readonly string _uploadsFolderPath;
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly IPhotoRepository _photoRepository;
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly PhotoSettings _settings;
 
         public PhotoController (IHostingEnvironment hostEnv,
             IVehicleRepository vehicleRepository,
+            IPhotoRepository photoRepository,
             IUnitOfWork uow, IMapper mapper,
             IOptionsSnapshot<PhotoSettings> options) {
             this._mapper = mapper;
-            _settings = options.Value;
+            this._settings = options.Value;
             this._uow = uow;
             this._vehicleRepository = vehicleRepository;
+            this._photoRepository = photoRepository;
             this._hostEnv = hostEnv;
-            _uploadsFolderPath = Path.Combine (_hostEnv.WebRootPath, $"uploadedPhotos");
+            this._uploadsFolderPath = Path.Combine (_hostEnv.WebRootPath, $"uploadedPhotos");
         }
 
         [HttpPost]
@@ -59,6 +63,10 @@ namespace Vega.Controllers {
             return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }
 
+        public async Task<IEnumerable<PhotoResource>> GetPhotos(int vehicleId) {
+            var photos = await _photoRepository.GetPhotos(vehicleId);
+            return _mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos);
+        }
         private string SaveAndGetRelativePath(int vehicleId, IFormFile file) {
             var path = Path.Combine (_uploadsFolderPath, String.Format("{0,8:D8}", vehicleId));
             if (!Directory.Exists (path))
