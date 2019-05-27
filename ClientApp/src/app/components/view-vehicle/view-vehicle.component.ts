@@ -4,6 +4,7 @@ import { ToastyService } from 'ng2-toasty';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, isDevMode, ElementRef, ViewChild } from '@angular/core';
 import { Vehicle } from './../../models/Vehicle';
+import { Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './view-vehicle.component.html',
@@ -14,6 +15,7 @@ export class ViewVehicleComponent implements OnInit {
   photos: any[] = [];
   progress: number = 0;
   vehicleId: number;
+  uploadSubscription: Subscription;
   @ViewChild('fileInput') fileInput: ElementRef;
 
   isDevMode: boolean = isDevMode();
@@ -74,7 +76,7 @@ export class ViewVehicleComponent implements OnInit {
     let nativeELement: HTMLInputElement = this.fileInput.nativeElement;
     let file = nativeELement.files[0];
     nativeELement.value = '';
-    this.photoService.upload(this.vehicleId, file,
+    this.uploadSubscription = this.photoService.upload(this.vehicleId, file,
       event => {
         // Compute and show the % done:
         this.progress = Math.round(100 * event.loaded / event.total);
@@ -82,6 +84,17 @@ export class ViewVehicleComponent implements OnInit {
           console.log(`File "${file.name}" is ${this.progress}% uploaded.`);
       },
       event => this.photos.push(event.body));
+  }
+
+  fileIsBeingUploaded() : boolean {
+    return (this.progress > 0) && (this.progress < 100);
+  }
+
+  cancelUpload() : void {
+    if (isDevMode)
+      console.log("Cancelling upload.");
+    this.uploadSubscription.unsubscribe();
+    this.progress = 0;
   }
 
   toList() {
