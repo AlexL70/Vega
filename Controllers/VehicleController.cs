@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vega.Core;
@@ -42,7 +43,7 @@ namespace Vega.Controllers
             return Ok(_mapper.Map<Vehicle, VehicleResource>(vehicle));
         }
 
-        [HttpPost]
+        [HttpPost] [Authorize]
         [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateVehicle([FromBody] SaveVehicleResource dto) {
@@ -60,7 +61,7 @@ namespace Vega.Controllers
                 _mapper.Map<Vehicle, VehicleResource>(retObj));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] [Authorize]
         [ProducesResponseType(typeof(VehicleResource), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,7 +86,7 @@ namespace Vega.Controllers
             return Ok(_mapper.Map<Vehicle, VehicleResource>(vehicle));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] [Authorize]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteVehicle(int id) {
