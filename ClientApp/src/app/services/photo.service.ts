@@ -1,11 +1,14 @@
-import { HttpClient, HttpRequest, HttpProgressEvent, HttpEventType, HttpXhrBackend } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { ToastyService } from 'ng2-toasty';
+import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
+import { Injectable, isDevMode } from '@angular/core';
 import { HttpUploadProgressEvent } from '@angular/common/http/src/response';
 
 @Injectable()
 export class PhotoService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private toasty: ToastyService
+    ) { }
 
   upload(vehicleId: number, photo: Blob,
     progressCallback: (HttpUploadProgressEvent) => void,
@@ -25,6 +28,17 @@ export class PhotoService {
             completeCallback(event);
           break;
         }
+    },
+    err => {
+      if (isDevMode)
+        console.log(err);
+        this.toasty.error({
+          title: 'Error',
+          msg: err.error,
+          theme: 'bootstrap',
+          showClose: true,
+          timeout: 5000
+        });
     });
   }
 
