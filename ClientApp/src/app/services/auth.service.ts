@@ -5,10 +5,11 @@ import Auth0Lock from 'auth0-lock';
 Injectable()
 export class Auth {
   private readonly token = 'token';
-  //  Configure Auth0
-  lock = new Auth0Lock('dfyTdzt05ACS3z82F65bLcjrg84FYNbO', 'dev-zlon.eu.auth0.com');
+  lock: Auth0LockStatic;
 
   constructor() {
+    //  Configure Auth0
+    this.lock = new Auth0Lock('dfyTdzt05ACS3z82F65bLcjrg84FYNbO', 'dev-zlon.eu.auth0.com');
     //  Add callback for lock `authenticated` event
     this.lock.on('authenticated', (authResult) => {
       console.log('AuthResult', authResult);

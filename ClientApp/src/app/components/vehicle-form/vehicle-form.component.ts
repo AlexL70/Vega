@@ -1,8 +1,9 @@
+
+import {forkJoin as observableForkJoin,  Observable } from 'rxjs';
 import { Component, OnInit, isDevMode } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastyService } from 'ng2-toasty';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/forkJoin';
+
 
 import { Make } from '../../models/Make';
 import { Model } from '../../models/Model';
@@ -49,7 +50,7 @@ export class VehicleFormComponent implements OnInit {
     if(this.vehicle.id)
       sources.push(this.vehicleService.getVehicle(this.vehicle.id));
 
-    Observable.forkJoin(sources).subscribe(data => {
+    observableForkJoin(sources).subscribe(data => {
         this.makes = data[0];
         this.features = data[1];
         if(this.vehicle.id) {
