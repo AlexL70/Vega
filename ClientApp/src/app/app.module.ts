@@ -1,3 +1,4 @@
+import { Auth } from './services/auth.service';
 import { AppErrorHandler } from './app.error.handler';
 import { ErrorHandler } from '@angular/core';
 import { NgModule } from '@angular/core';
@@ -53,7 +54,8 @@ Sentry.init({
   providers: [
     { provide: ErrorHandler, useClass: AppErrorHandler},
     VehicleService,
-    PhotoService
+    PhotoService,
+    Auth
   ],
   bootstrap: [AppComponent]
 })
