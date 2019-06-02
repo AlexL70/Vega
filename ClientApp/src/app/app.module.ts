@@ -20,6 +20,7 @@ import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.com
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/shared/pagination/pagination.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
+import { AdminComponent} from './components/admin/admin.component';
 
 Sentry.init({
   dsn: "https://f744306dfa3249e8a86ff4b4b14ef880@sentry.io/1455076"
@@ -27,6 +28,7 @@ Sentry.init({
 @NgModule({
   declarations: [
     AppComponent,
+    AdminComponent,
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
@@ -47,6 +49,7 @@ Sentry.init({
       { path: 'vehicles/:id', component: ViewVehicleComponent },
       { path: 'vehicles/edit/:id', component: VehicleFormComponent },
       { path: 'vehicles', component: VehicleListComponent},
+      { path: 'admin', component: AdminComponent},
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ])
