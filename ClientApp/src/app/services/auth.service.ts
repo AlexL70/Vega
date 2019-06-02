@@ -6,6 +6,7 @@ Injectable()
 export class Auth {
   private readonly token = 'token';
   lock: Auth0LockStatic;
+  profile: any;
 
   constructor() {
     //  Configure Auth0
@@ -14,14 +15,38 @@ export class Auth {
         responseType: 'token id_token',
         audience: 'https://api.vega.com',
         redirectUrl: 'https://localhost:5001',
+        params: {
+          scope: 'openid email profile'
+        }
       },
+      additionalSignUpFields: [
+        {
+          name: "name",
+          placeholder: "Name"
+        }
+      ],
       autoclose: true,
       oidcConformant: true
     });
+    //  Get user profile from the local storage if any
+    this.profile = JSON.parse(localStorage.getItem('profile'));
+    if(this.profile)
+      // console.log("User profile got from the local storage: ", this.profile);
     //  Add callback for lock `authenticated` event
     this.lock.on('authenticated', (authResult) => {
-      console.log('AuthResult', authResult);
+      // console.log('AuthResult', authResult);
       localStorage.setItem(this.token, authResult.accessToken);
+
+      this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
+        if (error) {
+          throw error;
+        }
+        if (profile) {
+          // console.log("User profile: ", profile);
+          localStorage.setItem('profile', JSON.stringify(profile));
+          this.profile = profile;
+        }
+      });
     });
   }
 
@@ -39,5 +64,7 @@ export class Auth {
   public logout(): void {
     //  Remove token from localStorage
     localStorage.removeItem(this.token);
+    localStorage.removeItem('profile');
+    this.profile = null;
   }
 }
