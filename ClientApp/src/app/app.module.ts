@@ -1,3 +1,5 @@
+import { AdminAuthGuard } from './services/admin-auth-guard.service';
+import { AuthGuard } from './services/auth-guard.service';
 import { Auth } from './services/auth.service';
 import { AppErrorHandler } from './app.error.handler';
 import { ErrorHandler } from '@angular/core';
@@ -49,7 +51,7 @@ Sentry.init({
       { path: 'vehicles/:id', component: ViewVehicleComponent },
       { path: 'vehicles/edit/:id', component: VehicleFormComponent },
       { path: 'vehicles', component: VehicleListComponent},
-      { path: 'admin', component: AdminComponent},
+      { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminAuthGuard]},
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ])
@@ -58,7 +60,9 @@ Sentry.init({
     { provide: ErrorHandler, useClass: AppErrorHandler},
     VehicleService,
     PhotoService,
-    Auth
+    Auth,
+    AuthGuard,
+    AdminAuthGuard
   ],
   bootstrap: [AppComponent]
 })
