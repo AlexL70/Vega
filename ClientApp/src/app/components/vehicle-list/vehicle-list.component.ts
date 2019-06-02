@@ -1,3 +1,4 @@
+import { Auth } from './../../services/auth.service';
 import { ColumnHeader } from '../../models/ColumnHeader';
 import { VehicleQuery } from '../../models/VehicleQuery';
 import { Component, OnInit } from '@angular/core';
@@ -30,7 +31,8 @@ export class VehicleListComponent implements OnInit {
   ];
   totalCount: number;
 
-  constructor(private vehicleService: VehicleService) { }
+  constructor(private vehicleService: VehicleService,
+    private auth: Auth) { }
 
   ngOnInit() {
     this.vehicleService.getMakes()

@@ -47,9 +47,9 @@ Sentry.init({
     ToastyModule.forRoot(),
     RouterModule.forRoot([
       { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
-      { path: 'vehicles/new', component: VehicleFormComponent },
+      { path: 'vehicles/new', component: VehicleFormComponent, canActivate: [AuthGuard] },
       { path: 'vehicles/:id', component: ViewVehicleComponent },
-      { path: 'vehicles/edit/:id', component: VehicleFormComponent },
+      { path: 'vehicles/edit/:id', component: VehicleFormComponent, canActivate: [AuthGuard] },
       { path: 'vehicles', component: VehicleListComponent},
       { path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminAuthGuard]},
       { path: 'counter', component: CounterComponent },

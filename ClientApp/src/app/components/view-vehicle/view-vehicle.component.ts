@@ -1,3 +1,4 @@
+import { Auth } from './../../services/auth.service';
 import { PhotoService } from './../../services/photo.service';
 import { VehicleService } from './../../services/vehicle.service';
 import { ToastyService } from 'ng2-toasty';
@@ -26,7 +27,8 @@ export class ViewVehicleComponent implements OnInit {
     private router: Router,
     private toasty: ToastyService,
     private vehicleService: VehicleService,
-    private photoService: PhotoService
+    private photoService: PhotoService,
+    private auth: Auth
   ) {
     route.params.subscribe(p => {
       this.vehicleId = +p['id'];

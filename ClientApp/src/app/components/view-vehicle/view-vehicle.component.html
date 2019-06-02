@@ -38,7 +38,7 @@
     <div role="tabpanel" [class]="activeTab == 'picture' ? 'tab-pane active' : 'tab-pane'" id="{{picture}}">
       <h2>Picture</h2>
       <p></p>
-      <input type="file" (change)="uploadPhoto()" #fileInput>
+      <input type="file" (change)="uploadPhoto()" *ngIf="auth.authenticated()" #fileInput>
       <div class="progress" *ngIf="fileIsBeingUploaded()">
         <div class="progress-bar" [style.width]="progress + '%'">
           <span class="sr-only">{{ progress }}% complete</span>
@@ -54,9 +54,9 @@
       <img *ngFor="let photo of photos" src="{{photo.fileName}}" class="img-thumbnail">
     </div>
     <div>
-      <button class="btn btn-primary" (click)="edit()">Edit</button>
+      <button *ngIf="auth.authenticated()" class="btn btn-primary" (click)="edit()">Edit</button>
       &nbsp;
-      <button class="btn btn-danger" (click)="delete()">Delete</button>
+      <button *ngIf="auth.authenticated()" class="btn btn-danger" (click)="delete()">Delete</button>
       &nbsp;
       <button class="btn btn-default" (click)="toList()">View All Vehicles</button>
     </div>
