@@ -1,3 +1,4 @@
+import { Auth } from './auth.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -13,7 +14,8 @@ import { QueryResult } from '../models/QueryResult';
 })
 export class VehicleService {
   private readonly vehicleEndpoint: string = '/api/vehicles';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private auth: Auth) {}
 
   getMakes(): Observable<Make[]> {
     return <Observable<Make[]>> this.http.get('/api/makes');
@@ -39,15 +41,18 @@ export class VehicleService {
   }
 
   create(vehicle: SaveVehicle): Observable<Vehicle> {
-    return <Observable<Vehicle>> this.http.post(this.vehicleEndpoint, vehicle);
+    return <Observable<Vehicle>> this.http.post(this.vehicleEndpoint, vehicle,
+      this.auth.getSecureHeades());
   }
 
   update(vehicle: SaveVehicle): Observable<Vehicle> {
-    return <Observable<Vehicle>> this.http.put(`${this.vehicleEndpoint}/${vehicle.id}`, vehicle);
+    return <Observable<Vehicle>> this.http.put(`${this.vehicleEndpoint}/${vehicle.id}`, vehicle,
+      this.auth.getSecureHeades());
   }
 
   delete(id: number): Observable<Vehicle> {
-    return <Observable<Vehicle>> this.http.delete(`${this.vehicleEndpoint}/${id}`);
+    return <Observable<Vehicle>> this.http.delete(`${this.vehicleEndpoint}/${id}`,
+      this.auth.getSecureHeades());
   }
 
   getVehicle(id: number) {

@@ -1,6 +1,7 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import Auth0Lock from 'auth0-lock';
+import { HttpHeaders } from '@angular/common/http';
 
 Injectable()
 export class Auth {
@@ -68,6 +69,14 @@ export class Auth {
 
   public hasRole(role: string) {
     return this.roles && this.roles.indexOf(role) > -1;
+  }
+
+  public getSecureHeades(): { headers: HttpHeaders} | {} {
+    if (this.authenticated) {
+      let token = localStorage.getItem(this.tokenKey);
+      return { headers: new HttpHeaders().set("Authorization", `Bearer ${token}`) };
+    }
+    else return {};
   }
 
   public login(): void {
