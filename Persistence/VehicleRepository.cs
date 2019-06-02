@@ -54,9 +54,11 @@ namespace Vega.Persistence
                 return await _context.Vehicles
                     .Include(v => v.Features).ThenInclude(f => f.Feature)
                     .Include(v => v.Model).ThenInclude(m => m.Make)
+                    .Include(v => v.Photos)
                     .SingleOrDefaultAsync(v => v.Id == id);
 
-            return await _context.Vehicles.FindAsync(id);
+            return await _context.Vehicles.Include(v => v.Photos)
+                .SingleOrDefaultAsync(v => v.Id == id);
         }
 
         public async Task Add(Vehicle vehicle) {
