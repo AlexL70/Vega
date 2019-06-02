@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Vega.Common;
 using Vega.Core;
 using Vega.Core.Models;
 using Vega.Core.Models.Resources;

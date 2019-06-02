@@ -46,6 +46,14 @@ namespace Vega
             {
                 options.Authority = "https://dev-zlon.eu.auth0.com/";
                 options.Audience = "https://api.vega.com";
+            });
+
+            //  Add Authorization Services
+            services.AddAuthorization(options => {
+                options.AddPolicy(Constants.Policies.RequiresAdminRole, policy =>
+                    policy.RequireClaim(Constants.ClaimTypes.VegaRoles, Constants.Roles.Admin));
+                options.AddPolicy(Constants.Policies.RequiresManagerRole, policy =>
+                    policy.RequireClaim(Constants.ClaimTypes.VegaRoles, Constants.Roles.Manager));
             });            
 
             // In production, the Angular files will be served from this directory
