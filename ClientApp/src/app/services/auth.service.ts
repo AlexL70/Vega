@@ -9,8 +9,8 @@ export class Auth {
   profile: any;
 
   constructor() {
-    //  Configure Auth0
-    this.lock = new Auth0Lock('dfyTdzt05ACS3z82F65bLcjrg84FYNbO', 'dev-zlon.eu.auth0.com', {
+    //  lock configuration options
+    var options = {
       auth: {
         responseType: 'token id_token',
         audience: 'https://api.vega.com',
@@ -27,11 +27,13 @@ export class Auth {
       ],
       autoclose: true,
       oidcConformant: true
-    });
+    };
+    //  Configure Auth0
+    this.lock = new Auth0Lock('dfyTdzt05ACS3z82F65bLcjrg84FYNbO', 'dev-zlon.eu.auth0.com', options);
     //  Get user profile from the local storage if any
     this.profile = JSON.parse(localStorage.getItem('profile'));
-    if(this.profile)
-      // console.log("User profile got from the local storage: ", this.profile);
+    // if(this.profile)
+    //   console.log("User profile got from the local storage: ", this.profile);
     //  Add callback for lock `authenticated` event
     this.lock.on('authenticated', (authResult) => {
       // console.log('AuthResult', authResult);
