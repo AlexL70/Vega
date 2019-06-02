@@ -13,6 +13,7 @@
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" (click)="auth.login()" *ngIf="!auth.authenticated()">Login</a>
+            <!-- <a class="nav-link text-dark" href="https://dev-zlon.eu.auth0.com/login?Client=dfyTdzt05ACS3z82F65bLcjrg84FYNbO" *ngIf="!auth.authenticated()">Login</a> -->
             <a class="nav-link text-dark" (click)="auth.logout()" *ngIf="auth.authenticated()">Logoff</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>

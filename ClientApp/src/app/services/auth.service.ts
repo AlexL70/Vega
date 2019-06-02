@@ -21,7 +21,7 @@ export class Auth {
     //  Add callback for lock `authenticated` event
     this.lock.on('authenticated', (authResult) => {
       console.log('AuthResult', authResult);
-      localStorage.setItem(this.token, authResult.idToken);
+      localStorage.setItem(this.token, authResult.accessToken);
     });
   }
 
