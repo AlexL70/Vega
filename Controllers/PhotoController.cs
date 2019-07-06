@@ -17,25 +17,23 @@ namespace Vega.Controllers {
     [Route ("/api/vehicles/{vehicleId}/photos")]
     public class PhotoController : Controller {
         private readonly IHostingEnvironment _hostEnv;
-        private readonly string _uploadsFolderPath;
         private readonly IVehicleRepository _vehicleRepository;
         private readonly IPhotoRepository _photoRepository;
-        private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly PhotoSettings _settings;
+        private readonly IPhotoService _photoService;
 
         public PhotoController (IHostingEnvironment hostEnv,
             IVehicleRepository vehicleRepository,
             IPhotoRepository photoRepository,
-            IUnitOfWork uow, IMapper mapper,
+            IPhotoService photoService, IMapper mapper,
             IOptionsSnapshot<PhotoSettings> options) {
             this._mapper = mapper;
             this._settings = options.Value;
-            this._uow = uow;
             this._vehicleRepository = vehicleRepository;
             this._photoRepository = photoRepository;
             this._hostEnv = hostEnv;
-            this._uploadsFolderPath = Path.Combine (_hostEnv.WebRootPath, $"uploadedPhotos");
+            this._photoService = photoService;
         }
 
         [HttpPost]
@@ -53,36 +51,14 @@ namespace Vega.Controllers {
             if(!_settings.IsAcceptedFileType(file.FileName))
                 return BadRequest($"Invalid file type.");
 
-            var photo = new Photo {
-                Id = 0,
-                FileName = SaveAndGetRelativePath(vehicleId, file)
-            };
+            var photo = await _photoService.UploadPhoto(vehicle, _hostEnv.WebRootPath, file);
 
-            vehicle.Photos.Add (photo);
-            await _uow.Complete ();
             return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }
 
         public async Task<IEnumerable<PhotoResource>> GetPhotos(int vehicleId) {
             var photos = await _photoRepository.GetPhotos(vehicleId);
             return _mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos);
-        }
-        private string SaveAndGetRelativePath(int vehicleId, IFormFile file) {
-            var path = Path.Combine (_uploadsFolderPath, String.Format("{0,8:D8}", vehicleId));
-            if (!Directory.Exists (path))
-                Directory.CreateDirectory (path);
-            var filePath = Path.Combine (path, $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}");
-            var image = getThumbnail(file.OpenReadStream());
-            image.Save (filePath);
-            return Path.GetRelativePath(_hostEnv.WebRootPath, filePath);
-        }
-
-        private Image getThumbnail(Stream stream)
-        {
-            var image = Image.FromStream (stream);
-            var max = Math.Max(image.Width, image.Height);
-            double div = max > 200 ? max / 200.0 : 1.0; // max image dimension is 200
-            return image.GetThumbnailImage ( (int)(image.Width / div), (int)(image.Height / div), () => false, IntPtr.Zero);
         }
     }
 }
