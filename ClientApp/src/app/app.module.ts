@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { ToastyModule } from 'ng2-toasty';
+import { ChartModule } from 'angular2-chartjs';
 import * as Sentry from '@sentry/browser';
 
 import { VehicleService } from './services/vehicle.service';
@@ -44,6 +45,7 @@ Sentry.init({
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ChartModule,
     ToastyModule.forRoot(),
     RouterModule.forRoot([
       { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
