@@ -2,11 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Vega.Core.Models;
 
 namespace Vega.Extensions
 {
     public static class IQueryableExtensions
     {
+        public static IQueryable<Vehicle> ApplyFiltering(this IQueryable<Vehicle> query,
+            VehicleQuery queryObj) {
+            if(queryObj?.MakeId.HasValue ?? false)
+                return query.Where(v => v.Model.MakeId == queryObj.MakeId.Value);
+            else
+                return query;
+        }
+
         public static IQueryable<T> ApplyOrdering<T>(this IQueryable<T> query,
             IOrderObject orderObj,
             Dictionary<string, Expression<Func<T, object>>> orderMapping)

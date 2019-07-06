@@ -22,8 +22,7 @@ namespace Vega.Persistence
         public async Task<QueryResult<Vehicle>> GetVehicles(VehicleQuery queryObj) {
             IQueryable<Vehicle> query = _context.Vehicles;
 
-            if(queryObj?.MakeId.HasValue ?? false)
-                query = query.Where(v => v.Model.MakeId == queryObj.MakeId.Value);
+            query = query.ApplyFiltering(queryObj);
 
             var count = await query.CountAsync();
 
@@ -38,7 +37,6 @@ namespace Vega.Persistence
                 [nameof(Vehicle.ContactName).ToLower()] = v => v.ContactName,
                 [nameof(Vehicle.Id).ToLower()] = v => v.Id
             };
-
             query = query.ApplyOrdering(queryObj, orderMapping);
 
             query = query.ApplyPaging(queryObj);
